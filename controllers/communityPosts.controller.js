@@ -1,3 +1,6 @@
+// NPM Libraries
+let PatrolMan = require('patrolman');
+
 // Config
 const APIURL = require('../config/config.environment')[process.env.NODE_ENV].url;
 
@@ -11,6 +14,12 @@ const { newCommunityPost } = require('../datatypes/emails.datatypes');
 
 // Helpers
 const CommunityPostsHelper = require('../mongo/helpers/communityPosts.helper');
+
+// Policies
+const PatrolManPolicies = require('../policies/config');
+
+// Constants
+PatrolMan = new PatrolMan(PatrolManPolicies);
 
 const CommunityPostsController = {
   createPost: async (req, res) => {
@@ -67,4 +76,4 @@ Approval URL: ${APIURL}/api/communityPosts/post/${createPost._id}/approve
   },
 };
 
-module.exports = CommunityPostsController;
+module.exports = PatrolMan.patrol('communityPosts', CommunityPostsController);

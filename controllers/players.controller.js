@@ -1,3 +1,6 @@
+// NPM Libraries
+let PatrolMan = require('patrolman');
+
 // Config
 const EnvConfig = require('../config/config.environment');
 
@@ -25,16 +28,14 @@ const PlayerService = require('../services/players.service');
 // Tasks
 const fetchUserStatsTask = require('../tasks/fetchUserStats.task');
 
+// Policies
+const PatrolManPolicies = require('../policies/config');
+
+// Constants
+PatrolMan = new PatrolMan(PatrolManPolicies);
+
 const PlayerController = {
   addPlayer: async (req, res) => {
-    const {
-      authorization,
-    } = req.headers;
-
-    if (isNllOrUnd(authorization) || authorization !== EnvConfig.admin.apiKey) {
-      return res.status(403).json(new MazzError().addPermError('Please pass authorization apiKey in header'));
-    }
-
     const {
       name,
       gamertag,
@@ -166,4 +167,4 @@ const PlayerController = {
   },
 };
 
-module.exports = PlayerController;
+module.exports = PatrolMan.patrol('players', PlayerController);

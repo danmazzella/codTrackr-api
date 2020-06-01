@@ -1,8 +1,5 @@
 // NPM Modules
-
-// Controllers
-
-// Services
+let PatrolMan = require('patrolman');
 
 // Config
 const EnvConfig = require('../config/config.environment');
@@ -21,6 +18,12 @@ const Logger = require('../utils/winston');
 const MazzError = require('../utils/mazzErrors');
 const Tools = require('../utils/tools');
 const Validator = require('../utils/validator');
+
+// Policies
+const PatrolManPolicies = require('../policies/config');
+
+// Constants
+PatrolMan = new PatrolMan(PatrolManPolicies);
 
 const ScriptController = {
   recalculateOcaScores: async (req, res) => {
@@ -80,14 +83,6 @@ const ScriptController = {
   fetchAllMatchesForUser: async (req, res) => {
     try {
       const {
-        authorization,
-      } = req.headers;
-
-      if (isNllOrUnd(authorization) || authorization !== EnvConfig.admin.apiKey) {
-        return res.status(403).json(new MazzError().addPermError('Please pass authorization apiKey in header'));
-      }
-
-      const {
         gamertag,
       } = req.query;
 
@@ -116,4 +111,4 @@ const ScriptController = {
   },
 };
 
-module.exports = ScriptController;
+module.exports = PatrolMan.patrol('script', ScriptController);

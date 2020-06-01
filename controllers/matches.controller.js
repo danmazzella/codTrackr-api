@@ -1,3 +1,6 @@
+// NPM Libraries
+let PatrolMan = require('patrolman');
+
 // Utils
 const CODAPI = require('../utils/cod-api');
 const Logger = require('../utils/winston');
@@ -13,6 +16,12 @@ const PlayerHelpers = require('../mongo/helpers/players.helper');
 
 // Services
 const MatchesService = require('../services/matches.service');
+
+// Policies
+const PatrolManPolicies = require('../policies/config');
+
+// Constants
+PatrolMan = new PatrolMan(PatrolManPolicies);
 
 const MatchesController = {
   getMatches: async (req, res) => {
@@ -113,4 +122,4 @@ const MatchesController = {
   },
 };
 
-module.exports = MatchesController;
+module.exports = PatrolMan.patrol('matches', MatchesController);

@@ -1,3 +1,6 @@
+// NPM Libraries
+let PatrolMan = require('patrolman');
+
 // Config
 const EnvConfig = require('../config/config.environment');
 const MazzError = require('../utils/mazzErrors');
@@ -10,16 +13,14 @@ const {
 // Helpers
 const BlogHelper = require('../mongo/helpers/blog.helper');
 
+// Policies
+const PatrolManPolicies = require('../policies/config');
+
+// Constants
+PatrolMan = new PatrolMan(PatrolManPolicies);
+
 const BlogController = {
   createPost: async (req, res) => {
-    const {
-      authorization,
-    } = req.headers;
-
-    if (isNllOrUnd(authorization) || authorization !== EnvConfig.admin.apiKey) {
-      return res.status(403).json(new MazzError().addPermError('Please pass authorization apiKey in header'));
-    }
-
     const {
       author,
       content,
@@ -43,4 +44,4 @@ const BlogController = {
   },
 };
 
-module.exports = BlogController;
+module.exports = PatrolMan.patrol('blog', BlogController);

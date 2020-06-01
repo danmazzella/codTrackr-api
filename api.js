@@ -10,6 +10,7 @@ const app = express();
 const port = process.env.PORT || 8081;
 
 // Utils
+const { decryptAPIKey } = require('./utils/authorization');
 const Logger = require('./utils/winston');
 
 // CORS is necessary for cross-network requests
@@ -25,6 +26,9 @@ app.use(multipart());
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use(bodyParser.json({ extended: true, limit: '50mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Add API-Key middleware
+app.use('/api/', decryptAPIKey);
 
 // Initialize all the routes (API Endpoints) that can be hit)
 require('./routes/routes')(app);
