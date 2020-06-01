@@ -1,15 +1,6 @@
 // NPM Libraries
 let PatrolMan = require('patrolman');
 
-// Config
-const EnvConfig = require('../config/config.environment');
-const MazzError = require('../utils/mazzErrors');
-
-// Utils
-const {
-  isNllOrUnd,
-} = require('../utils/validator');
-
 // Helpers
 const BlogHelper = require('../mongo/helpers/blog.helper');
 

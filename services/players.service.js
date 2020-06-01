@@ -1,8 +1,8 @@
 // Utils
 const CommonHelpers = require('../utils/commonHelpers');
+const { isNllOrUnd } = require('../utils/validator');
 const Logger = require('../utils/winston');
 const Tools = require('../utils/tools');
-const Validator = require('../utils/validator');
 
 // Mongo Helpers
 const PlayerStatsHelper = require('../mongo/helpers/playerStats.helper');
@@ -11,14 +11,14 @@ const RecentMatchStatsHelper = require('../mongo/helpers/recentMatchStats.helper
 const PlayersService = {
   savePlayerStats: async (gamertag, playerStats) => {
     try {
-      if (Validator.isNullOrUndefined(playerStats) || Validator.isNullOrUndefined(playerStats.lifetime)) {
+      if (isNllOrUnd(playerStats) || isNllOrUnd(playerStats.lifetime)) {
         return {};
       }
 
       const { mode } = playerStats.lifetime;
       const modeArr = Tools.loopOverJson(mode);
 
-      if (Validator.isNullOrUndefined(modeArr)) {
+      if (isNllOrUnd(modeArr)) {
         return {};
       }
 

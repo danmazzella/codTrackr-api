@@ -3,6 +3,7 @@ let PatrolMan = require('patrolman');
 
 // Utils
 const CODAPI = require('../utils/cod-api');
+const { isNllOrUnd } = require('../utils/validator');
 const Logger = require('../utils/winston');
 const MazzError = require('../utils/mazzErrors');
 const Tools = require('../utils/tools');
@@ -53,13 +54,13 @@ const MatchesController = {
       } = req.params;
 
       // Validation on inputs
-      if (Validator.isNullOrUndefined(gamertag) || !Validator.isValidString(gamertag)) {
+      if (isNllOrUnd(gamertag) || !Validator.isValidString(gamertag)) {
         return res.status(400).json(new MazzError().addParamError('Missing or invalid gamertag'));
       }
 
       const playerObj = await PlayerHelpers.findOnePlayerByGamertag({ gamertag: Tools.lowerCaseRegex(gamertag, true) });
 
-      if (Validator.isNullOrUndefined(playerObj) || Validator.isNullOrUndefined(playerObj.gamertag)) {
+      if (isNllOrUnd(playerObj) || isNllOrUnd(playerObj.gamertag)) {
         return res.status(400).json('No gamer found with passed gamertag');
       }
 

@@ -1,9 +1,9 @@
 // Utils
 const CommonHelpers = require('../utils/commonHelpers');
+const { isNllOrUnd } = require('../utils/validator');
 const Logger = require('../utils/winston');
 const MazzError = require('../utils/mazzErrors');
 const Tools = require('../utils/tools');
-const Validator = require('../utils/validator');
 
 // Validator
 
@@ -101,7 +101,7 @@ const MatchesService = {
     try {
       const { summary } = matches;
 
-      if (Validator.isNullOrUndefined(summary)) {
+      if (isNllOrUnd(summary)) {
         return {};
       }
 
@@ -133,7 +133,7 @@ const MatchesService = {
   },
   saveMatchesForUser: async (gamertag, matches) => {
     try {
-      if (Validator.isNullOrUndefined(matches)) {
+      if (isNllOrUnd(matches)) {
         Logger.error('saveMatchesForUser - Matches is undefined');
         return {};
       }
@@ -142,7 +142,7 @@ const MatchesService = {
       matches.map((match) => {
         const matchObj = CommonHelpers.createMatchObj(gamertag, match);
 
-        if (!Validator.isNullOrUndefined(matchObj) && !Validator.isNullOrUndefined(matchObj.success) && matchObj.success === false) {
+        if (!isNllOrUnd(matchObj) && !isNllOrUnd(matchObj.success) && matchObj.success === false) {
           return {};
         }
 
@@ -229,14 +229,14 @@ const MatchesService = {
         },
       ];
 
-      if (!Validator.isNullOrUndefined(monthFilter)) {
+      if (!isNllOrUnd(monthFilter)) {
         aggregateObj[0].$match.matchTime = {
           $gte: new Date(`${parseInt(monthFilter.year, 10)}-${parseInt(monthFilter.month, 10)}-01`),
           $lt: new Date(`${parseInt(monthFilter.year, 10)}-${(parseInt(monthFilter.month, 10) + 1)}-01`),
         };
       }
 
-      if (!Validator.isNullOrUndefined(players)) {
+      if (!isNllOrUnd(players)) {
         aggregateObj[0].$match.playerName = { $in: players };
       }
 

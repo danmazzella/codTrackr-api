@@ -1,4 +1,5 @@
 // Utilities
+const { isNllOrUnd } = require('../utils/validator');
 const MazzError = require('../utils/mazzErrors');
 const Tools = require('../utils/tools');
 const Validator = require('../utils/validator');
@@ -90,11 +91,11 @@ const MatchesValidator = {
 
     const mazzError = new MazzError(400);
 
-    if (Validator.isNullOrUndefined(matchId)) {
+    if (isNllOrUnd(matchId)) {
       mazzError.addParamError('Missing or invalid matchId');
     }
 
-    if (Validator.isNullOrUndefined(gamertag)) {
+    if (isNllOrUnd(gamertag)) {
       mazzError.addParamError('Missing or invalid gamertag');
     }
 

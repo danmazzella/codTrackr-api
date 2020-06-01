@@ -1,16 +1,12 @@
 // NPM Libraries
 let PatrolMan = require('patrolman');
 
-// Config
-const EnvConfig = require('../config/config.environment');
-
 // Utils
 const CODAPI = require('../utils/cod-api');
 const { isNllOrUnd } = require('../utils/validator');
 const Logger = require('../utils/winston');
 const MazzError = require('../utils/mazzErrors');
 const Tools = require('../utils/tools');
-const Validator = require('../utils/validator');
 
 // Datatypes
 const { LAST_DATA_FETCH } = require('../datatypes/options.datatypes');
@@ -78,7 +74,7 @@ const PlayerController = {
 
       const playerObj = await PlayerHelpers.findOnePlayerByGamertag({ gamertag: Tools.lowerCaseRegex(gamertag, true) });
 
-      if (Validator.isNullOrUndefined(playerObj) || Validator.isNullOrUndefined(playerObj.platform)) {
+      if (isNllOrUnd(playerObj) || isNllOrUnd(playerObj.platform)) {
         return res.status(400).json(new MazzError().addParamError('Player not found in oCa database'));
       }
 

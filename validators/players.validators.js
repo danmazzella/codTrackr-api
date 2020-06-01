@@ -1,4 +1,5 @@
 // Utilities
+const { isNllOrUnd } = require('../utils/validator');
 const MazzError = require('../utils/mazzErrors');
 const Tools = require('../utils/tools');
 const Validator = require('../utils/validator');
@@ -20,15 +21,15 @@ const PlayersValidator = {
 
     const mazzError = new MazzError(400);
 
-    if (Validator.isNullOrUndefined(name) || !Validator.isValidString(name)) {
+    if (isNllOrUnd(name) || !Validator.isValidString(name)) {
       mazzError.addParamError('Missing or invalid name');
     }
 
-    if (Validator.isNullOrUndefined(gamertag) || !Validator.isValidString(gamertag)) {
+    if (isNllOrUnd(gamertag) || !Validator.isValidString(gamertag)) {
       mazzError.addParamError('Missing or invalid gamertag');
     }
 
-    if (Validator.isNullOrUndefined(platform) || platform !== platforms.battle || platform !== platforms.psn || platform !== platforms.steam || platform !== platforms.xbl) {
+    if (isNllOrUnd(platform) || platform !== platforms.battle || platform !== platforms.psn || platform !== platforms.steam || platform !== platforms.xbl) {
       mazzError.addParamError('Missing or invalid platform');
     }
 
@@ -46,7 +47,7 @@ const PlayersValidator = {
 
     const mazzError = new MazzError(400);
 
-    if (Validator.isNullOrUndefined(gamertag) || !Validator.isValidString(gamertag)) {
+    if (isNllOrUnd(gamertag) || !Validator.isValidString(gamertag)) {
       mazzError.addParamError('Missing or invalid gamertag');
     }
 
@@ -84,7 +85,7 @@ const PlayersValidator = {
       modeType = 'all';
     }
 
-    if (Validator.isNullOrUndefined(sortColumn)) {
+    if (isNllOrUnd(sortColumn)) {
       sortColumn = 'avgOcaScore';
     }
 
@@ -120,7 +121,7 @@ const PlayersValidator = {
     let pageSize = Tools.toInteger(_pageSize);
     let players = Tools.toArray(_players);
     let sortColumn = _sortColumn;
-    let sortDir = !Validator.isNullOrUndefined(_sortDir) ? _sortDir.toLowerCase() : undefined;
+    let sortDir = !isNllOrUnd(_sortDir) ? _sortDir.toLowerCase() : undefined;
 
     if (!Validator.isValidId(page)) {
       page = 1;
@@ -134,7 +135,7 @@ const PlayersValidator = {
       modeType = 'all';
     }
 
-    if (Validator.isNullOrUndefined(sortColumn)) {
+    if (isNllOrUnd(sortColumn)) {
       sortColumn = 'kills';
     }
 

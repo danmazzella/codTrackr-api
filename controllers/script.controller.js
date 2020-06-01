@@ -1,9 +1,6 @@
 // NPM Modules
 let PatrolMan = require('patrolman');
 
-// Config
-const EnvConfig = require('../config/config.environment');
-
 // Helpers
 const MatchesHelper = require('../mongo/helpers/matches.helper');
 const PlayersHelper = require('../mongo/helpers/players.helper');
@@ -17,7 +14,6 @@ const { isNllOrUnd } = require('../utils/validator');
 const Logger = require('../utils/winston');
 const MazzError = require('../utils/mazzErrors');
 const Tools = require('../utils/tools');
-const Validator = require('../utils/validator');
 
 // Policies
 const PatrolManPolicies = require('../policies/config');
@@ -86,13 +82,13 @@ const ScriptController = {
         gamertag,
       } = req.query;
 
-      if (Validator.isNullOrUndefined(gamertag)) {
+      if (isNllOrUnd(gamertag)) {
         return res.status(400).json(new MazzError().addParamError('Missing gamertag'));
       }
 
       const playerObj = await PlayersHelper.findOnePlayerByGamertag({ gamertag: Tools.lowerCaseRegex(gamertag, true) });
 
-      if (Validator.isNullOrUndefined(playerObj) || Validator.isNullOrUndefined(playerObj.platform)) {
+      if (isNllOrUnd(playerObj) || isNllOrUnd(playerObj.platform)) {
         return res.status(400).json(new MazzError().addParamError('Invalid gamertag'));
       }
 

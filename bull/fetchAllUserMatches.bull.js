@@ -3,8 +3,8 @@ const Bull = require('./bull').fetchAllUserMatchesQueue;
 
 // Utils
 const CODAPI = require('../utils/cod-api');
+const { isNllOrUnd } = require('../utils/validator');
 const Logger = require('../utils/winston');
-const Validator = require('../utils/validator');
 
 // Helpers
 
@@ -30,7 +30,7 @@ Bull.process(async (job, done) => {
 
     const matches = await CODAPI.warzoneDateRangeMatches(gamertag, startTime, endTime, platform);
 
-    if (Validator.isNullOrUndefined(matches) || Validator.isNullOrUndefined(matches.matches)) {
+    if (isNllOrUnd(matches) || isNllOrUnd(matches.matches)) {
       Logger.debug('No matches for user:', gamertag);
       return done();
     }

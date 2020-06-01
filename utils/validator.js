@@ -2,7 +2,7 @@ const REGEX_EMAIL = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"
 
 const Validator = {
   isValidId(id) {
-    if (this.isNullOrUndefined(id)) {
+    if (this.isNllOrUnd(id)) {
       return false;
     }
     return !Number.isNaN(id);
@@ -50,15 +50,8 @@ const Validator = {
     }
     return false;
   },
-  isNullOrUndefined(pValue) {
-    // if (pValue === undefined || pValue === null || pValue.trim() === '') {
-    if (pValue === undefined || pValue === null || (typeof pValue === 'string' && pValue.trim() === '')) {
-      return true;
-    }
-    return false;
-  },
   isValidSortDir(value) {
-    if (this.isNullOrUndefined(value)) {
+    if (this.isNllOrUnd(value)) {
       return false;
     }
 
@@ -79,4 +72,10 @@ const Validator = {
 
 module.exports = Validator;
 
-module.exports.isNllOrUnd = Validator.isNullOrUndefined;
+module.exports.isNllOrUnd = (pValue) => {
+  // if (pValue === undefined || pValue === null || pValue.trim() === '') {
+  if (pValue === undefined || pValue === null || (typeof pValue === 'string' && pValue.trim() === '')) {
+    return true;
+  }
+  return false;
+};

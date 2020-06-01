@@ -1,5 +1,6 @@
+// Utils
+const { isNllOrUnd } = require('./validator');
 const Logger = require('./winston');
-const Validator = require('./validator');
 
 const CommonHelpers = {
   // Convert match into the Mongo match object
@@ -26,7 +27,7 @@ const CommonHelpers = {
         matchType = 'Battle Royal Duos';
       } else if (match.mode === 'br_77') {
         matchType = 'Scopes And Scatterguns';
-      } else if (!Validator.isNullOrUndefined(match.mode)) {
+      } else if (!isNllOrUnd(match.mode)) {
         matchType = match.mode;
       }
 
@@ -75,19 +76,19 @@ const CommonHelpers = {
 
       const playerObj = match.player;
       let playerName = playerObj.username;
-      if (!Validator.isNullOrUndefined(playerObj.clantag)) {
+      if (!isNllOrUnd(playerObj.clantag)) {
         playerName = `[${playerObj.clantag}]${playerObj.username}`;
       }
 
       // Get placement from the ranked teams
       const rankedTeamIndex = match.rankedTeams.findIndex((rankedTeam) => {
-        if (Validator.isNullOrUndefined(rankedTeam.players)) {
+        if (isNllOrUnd(rankedTeam.players)) {
           return false;
         }
 
         const playerIndex = rankedTeam.players.findIndex((player) => {
           let matchPlayerName = player.username;
-          if (!Validator.isNullOrUndefined(player.clantag)) {
+          if (!isNllOrUnd(player.clantag)) {
             matchPlayerName = `[${player.clantag}]${player.username}`;
           }
           return player.username === playerName || matchPlayerName === playerName;
@@ -98,8 +99,8 @@ const CommonHelpers = {
         return false;
       });
 
-      if (rankedTeamIndex > -1 && !Validator.isNullOrUndefined(match.rankedTeams[rankedTeamIndex])) {
-        if (!Validator.isNullOrUndefined(match.rankedTeams[rankedTeamIndex].players)) {
+      if (rankedTeamIndex > -1 && !isNllOrUnd(match.rankedTeams[rankedTeamIndex])) {
+        if (!isNllOrUnd(match.rankedTeams[rankedTeamIndex].players)) {
           matchObj.players = match.rankedTeams[rankedTeamIndex].players.map(player => player.username);
         }
         matchObj.placement = rankedTeamIndex + 1;
@@ -136,7 +137,7 @@ const CommonHelpers = {
       matchType = 'Battle Royal Duos';
     } else if (statsObj.key === 'br_77') {
       matchType = 'Scopes And Scatterguns';
-    } else if (!Validator.isNullOrUndefined(statsObj.key)) {
+    } else if (!isNllOrUnd(statsObj.key)) {
       matchType = statsObj.key;
     }
 
