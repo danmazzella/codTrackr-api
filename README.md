@@ -1,5 +1,4 @@
 # codTrackr-api
-# By: Dan Mazz <Trixat>
 
 This API was built to support a website for Warzone so that our friends can compare their stats/best matches with each other.
 
