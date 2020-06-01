@@ -15,12 +15,6 @@ const PlayerStatsHelpers = {
       .then(data => resolve(data))
       .catch(err => resolve(err));
   }),
-  aggregate: obj => new Promise((resolve) => {
-    PlayerStats
-      .aggregate(obj)
-      .then(data => resolve(data))
-      .catch(err => resolve(err));
-  }),
   aggregateAndCount: _arrayOfObj => new Promise((resolve) => {
     const arrayOfObj = _arrayOfObj;
     PlayerStats

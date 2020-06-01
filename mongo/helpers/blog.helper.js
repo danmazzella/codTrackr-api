@@ -10,7 +10,7 @@ const Logger = require('../../utils/winston');
 
 // Redis
 const { getAsync, redisClient } = require('../../redis/redis');
-const redisKeys = require('../../redis/keys');
+const { BLOG_POSTS } = require('../../redis/keys');
 
 const BlogHelpers = {
   createNewPost: obj => new Promise((resolve) => {
@@ -19,13 +19,13 @@ const BlogHelpers = {
     newBlogPost
       .save()
       .then((data) => {
-        redisClient.del(redisKeys.blogPosts);
+        redisClient.del(BLOG_POSTS);
         return resolve(data);
       })
       .catch(err => resolve(err));
   }),
   findAllPosts: (obj, project = {}, opt = {}) => new Promise(async (resolve) => {
-    const posts = await getAsync(redisKeys.blogPosts);
+    const posts = await getAsync(BLOG_POSTS);
 
     if (!isNllOrUnd(posts)) {
       try {
@@ -35,14 +35,14 @@ const BlogHelpers = {
           return resolve(jsonPosts);
         }
       } catch (error) {
-        Logger.error('Unable to parse redis key: ', redisKeys.blogPosts);
+        Logger.error('Unable to parse redis key: ', BLOG_POSTS);
       }
     }
 
     return Blog
       .find(obj, project, opt)
       .then((data) => {
-        redisClient.set(redisKeys.blogPosts, JSON.stringify(data));
+        redisClient.set(BLOG_POSTS, JSON.stringify(data));
         return resolve(data);
       })
       .catch(err => resolve(err));

@@ -4,13 +4,24 @@ const mongoose = require('mongoose');
 // Model
 const Players = mongoose.model('Players');
 
+// Utils
+const { isNllOrUnd } = require('../../utils/validator');
+const Logger = require('../../utils/winston');
+
+// Redis
+const { getAsync, redisClient } = require('../../redis/redis');
+const { ALL_PLAYERS } = require('../../redis/keys');
+
 const PlayersHelpers = {
   addNewPlayer: obj => new Promise((resolve) => {
     const newMatch = new Players(obj);
 
     newMatch
       .save()
-      .then(data => resolve(data))
+      .then((data) => {
+        redisClient.del(ALL_PLAYERS);
+        return resolve(data);
+      })
       .catch(err => resolve(err));
   }),
   findOnePlayerByGamertag: (obj, opts = {}, sort = {}) => new Promise((resolve) => {
@@ -19,38 +30,26 @@ const PlayersHelpers = {
       .then(data => resolve(data))
       .catch(err => resolve(err));
   }),
-  findAllPlayers: (obj, project = {}, opt = {}) => new Promise((resolve) => {
-    Players
-      .find(obj, project, opt)
-      .then(data => resolve(data))
-      .catch(err => resolve(err));
-  }),
-  aggregateAndCount: _arrayOfObj => new Promise((resolve) => {
-    const arrayOfObj = _arrayOfObj;
-    Players
-      .aggregate(arrayOfObj)
-      .then((data) => {
-        if (data == null) return resolve(null);
+  findAllPlayers: (obj, project = {}, opt = {}) => new Promise(async (resolve) => {
+    const players = await getAsync(ALL_PLAYERS);
 
-        for (let arrayOfObjIdx = arrayOfObj.length - 1; arrayOfObjIdx >= 0; arrayOfObjIdx -= 1) {
-          const key = arrayOfObj[arrayOfObjIdx];
-          if (Object.keys(key).length > 0) {
-            const keyName = Object.keys(key)[0];
-            if (keyName === '$skip' || keyName === '$limit') {
-              arrayOfObj.splice(arrayOfObjIdx, 1);
-            }
-          }
+    if (!isNllOrUnd(players)) {
+      try {
+        const jsonPlayers = JSON.parse(players);
+
+        if (jsonPlayers.length > 0) {
+          return resolve(jsonPlayers);
         }
+      } catch (error) {
+        Logger.error('Unable to parse redis key: ', ALL_PLAYERS);
+      }
+    }
 
-        arrayOfObj.push({ $count: 'count' });
-
-        return Players.aggregate(arrayOfObj).then((c) => {
-          if (c.length > 0) {
-            return resolve({ rows: data, count: c[0].count });
-          }
-
-          return resolve({ rows: data, count: 0 });
-        });
+    return Players
+      .find(obj, project, opt)
+      .then((data) => {
+        redisClient.set(ALL_PLAYERS, JSON.stringify(data));
+        return resolve(data);
       })
       .catch(err => resolve(err));
   }),

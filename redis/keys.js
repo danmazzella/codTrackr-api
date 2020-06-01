@@ -1,3 +1,3 @@
-module.exports = {
-  blogPosts: 'blogPosts',
-};
+module.exports.ALL_PLAYERS = 'allPlayers';
+module.exports.BLOG_POSTS = 'blogPosts';
+module.exports.COMMUNITY_POSTS = 'communityPosts';
