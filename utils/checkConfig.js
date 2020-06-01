@@ -111,7 +111,7 @@ const configTemplate = `module.exports = {
   },
   admin: {
     // ex: Any random string
-    apiKey: '{ADMIN_API_KEY'},
+    apiKey: '{ADMIN_API_KEY}',
   },
 };`;
 
