@@ -27,7 +27,7 @@ const BlogController = {
       title,
     } = req.body;
 
-    const createPost = await BlogHelper.build({
+    const createPost = await BlogHelper.createNewPost({
       author,
       content,
       headerImage,
@@ -38,7 +38,7 @@ const BlogController = {
     return res.status(200).json({ success: true, res: createPost });
   },
   getPosts: async (req, res) => {
-    const posts = await BlogHelper.find({}, undefined, { sort: { _id: -1 } });
+    const posts = await BlogHelper.findAllPosts({}, undefined, { sort: { _id: -1 } });
     return res.status(200).json({ success: true, posts });
   },
 };

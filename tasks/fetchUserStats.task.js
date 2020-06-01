@@ -9,7 +9,7 @@ const PlayerHelpers = require('../mongo/helpers/players.helper');
 
 module.exports = async () => {
   // Fetch all the users
-  const players = await PlayerHelpers.find({});
+  const players = await PlayerHelpers.findAllPlayers({});
 
   // For each player
   players.map((player) => {

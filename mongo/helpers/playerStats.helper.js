@@ -4,34 +4,8 @@ const mongoose = require('mongoose');
 // Model
 const PlayerStats = mongoose.model('PlayerStats');
 
-const MatchHelpers = {
-  build: obj => new Promise((resolve) => {
-    const newMatch = new PlayerStats(obj);
-
-    newMatch
-      .save()
-      .then(data => resolve(data))
-      .catch(err => resolve(err));
-  }),
-  find: (obj, project = {}, opt = {}) => new Promise((resolve) => {
-    PlayerStats
-      .find(obj, project, opt)
-      .then(data => resolve(data))
-      .catch(err => resolve(err));
-  }),
-  findOne: (obj, opts = {}, sort = {}) => new Promise((resolve) => {
-    PlayerStats
-      .findOne(obj, opts, sort)
-      .then(data => resolve(data))
-      .catch(err => resolve(err));
-  }),
-  updateOne: (find, update, opt) => new Promise((resolve) => {
-    PlayerStats
-      .updateOne(find, update, opt)
-      .then(data => resolve(data))
-      .catch(err => resolve(err));
-  }),
-  upsert: (findObj, updateObj) => new Promise((resolve) => {
+const PlayerStatsHelpers = {
+  upsertByGamertagModeType: (findObj, updateObj) => new Promise((resolve) => {
     PlayerStats
       .updateOne(
         findObj,
@@ -79,4 +53,4 @@ const MatchHelpers = {
 };
 
 
-module.exports = MatchHelpers;
+module.exports = PlayerStatsHelpers;

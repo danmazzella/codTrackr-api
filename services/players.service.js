@@ -27,7 +27,7 @@ const PlayersService = {
         if (modeItem.key === 'br_all' || modeItem.key === 'br' || modeItem.key === 'br_dmz') {
           const playerStatsObj = CommonHelpers.createPlayersStatsObj(gamertag, modeItem);
           return saveModeArr.push(PlayerStatsHelper
-            .upsert(
+            .upsertByGamertagModeType(
               {
                 gamertag,
                 modeType: playerStatsObj.modeType,

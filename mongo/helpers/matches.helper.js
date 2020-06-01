@@ -5,39 +5,31 @@ const mongoose = require('mongoose');
 const Matches = mongoose.model('Matches');
 
 const MatchHelpers = {
-  build: obj => new Promise((resolve) => {
-    const newMatch = new Matches(obj);
-
-    newMatch
-      .save()
-      .then(data => resolve(data))
-      .catch(err => resolve(err));
-  }),
-  find: (obj, project = {}, opt = {}) => new Promise((resolve) => {
-    Matches
-      .find(obj, project, opt)
-      .then(data => resolve(data))
-      .catch(err => resolve(err));
-  }),
-  findOne: (obj, opts = {}, sort = {}) => new Promise((resolve) => {
+  findOneByMatchIdPlayerName: (obj, opts = {}, sort = {}) => new Promise((resolve) => {
     Matches
       .findOne(obj, opts, sort)
       .then(data => resolve(data))
       .catch(err => resolve(err));
   }),
-  updateOne: (find, update, opt) => new Promise((resolve) => {
+  findAllMatchesNullOcaScore: obj => new Promise((resolve) => {
     Matches
-      .updateOne(find, update, opt)
+      .aggregate(obj)
       .then(data => resolve(data))
       .catch(err => resolve(err));
   }),
-  updateMany: (find, update, opt) => new Promise((resolve) => {
+  resetAllMatchesOcaScore: (find, update, opt) => new Promise((resolve) => {
     Matches
       .updateMany(find, update, opt)
       .then(data => resolve(data))
       .catch(err => resolve(err));
   }),
-  upsert: (findObj, updateObj) => new Promise((resolve) => {
+  saveOneMatchesOcaScore: (find, update, opt) => new Promise((resolve) => {
+    Matches
+      .updateOne(find, update, opt)
+      .then(data => resolve(data))
+      .catch(err => resolve(err));
+  }),
+  upsertByMatchIdPlayerName: (findObj, updateObj) => new Promise((resolve) => {
     Matches
       .updateOne(
         findObj,

@@ -5,21 +5,6 @@ const router = express.Router();
 
 /**
  *  @swagger
- *  /api/scripts/moveRankedTeamsToMatchTeams:
- *    post:
- *      tags: [ "ScriptsController" ]
- *      description: Move rankedTeams from matches to matchTeams
- *      responses:
- *        200:
- *          description: Server is up and running
- *        default:
- *          description: Something is wrong
- */
-router.route('/scripts/moveRankedTeamsToMatchTeams')
-  .post(ScriptsController.moveRankedTeamsToMatchTeams);
-
-/**
- *  @swagger
  *  /api/scripts/updateOcaScore:
  *    post:
  *      tags: [ "ScriptsController" ]

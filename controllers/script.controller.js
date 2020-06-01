@@ -9,7 +9,6 @@ const EnvConfig = require('../config/config.environment');
 
 // Helpers
 const MatchesHelper = require('../mongo/helpers/matches.helper');
-const MatchTeamsHelper = require('../mongo/helpers/matchTeams.helper');
 const PlayersHelper = require('../mongo/helpers/players.helper');
 
 // Bull
@@ -24,47 +23,10 @@ const Tools = require('../utils/tools');
 const Validator = require('../utils/validator');
 
 const ScriptController = {
-  moveRankedTeamsToMatchTeams: async (req, res) => {
-    const matches = await MatchesHelper.find({ rankedTeams: { $ne: null } });
-
-    const createMatchTeamsArr = [];
-    const deleteRankedTeamsArr = [];
-    matches.map((match) => {
-      const { matchId, rankedTeams, playerName } = match;
-      createMatchTeamsArr.push(MatchTeamsHelper
-        .upsert(
-          {
-            matchId,
-          },
-          {
-            matchId,
-            rankedTeams,
-          },
-        ));
-
-      return deleteRankedTeamsArr.push(MatchesHelper
-        .updateOne(
-          {
-            matchId,
-            playerName,
-          },
-          {
-            $set: {
-              rankedTeams: null,
-            },
-          },
-        ));
-    });
-
-    await Promise.all(createMatchTeamsArr);
-    await Promise.all(deleteRankedTeamsArr);
-
-    return res.status(200).json({ success: true });
-  },
   recalculateOcaScores: async (req, res) => {
     try {
       // Set all oCa Scores to null where modeType = BR3 or BR1
-      await MatchesHelper.updateMany(
+      await MatchesHelper.resetAllMatchesOcaScore(
         {},
         {
           $set: {
@@ -74,7 +36,7 @@ const ScriptController = {
       );
 
       // Get all matches where oCa Scores is null and modeType = BR3 or BR1
-      const matchesNullStats = await MatchesHelper.aggregate([
+      const matchesNullStats = await MatchesHelper.findAllMatchesNullOcaScore([
         {
           $match: {
             'stats.ocaScore': null,
@@ -92,7 +54,7 @@ const ScriptController = {
         match.stats.ocaScore = newOcaScore;
 
         // Save it for this match
-        savePromiseArr.push(MatchesHelper.updateOne(
+        savePromiseArr.push(MatchesHelper.saveOneMatchesOcaScore(
           {
             matchId: match.matchId,
             playerName: match.playerName,
@@ -133,7 +95,7 @@ const ScriptController = {
         return res.status(400).json(new MazzError().addParamError('Missing gamertag'));
       }
 
-      const playerObj = await PlayersHelper.findOne({ gamertag: Tools.lowerCaseRegex(gamertag, true) });
+      const playerObj = await PlayersHelper.findOnePlayerByGamertag({ gamertag: Tools.lowerCaseRegex(gamertag, true) });
 
       if (Validator.isNullOrUndefined(playerObj) || Validator.isNullOrUndefined(playerObj.platform)) {
         return res.status(400).json(new MazzError().addParamError('Invalid gamertag'));

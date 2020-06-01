@@ -48,7 +48,7 @@ const MatchesController = {
         return res.status(400).json(new MazzError().addParamError('Missing or invalid gamertag'));
       }
 
-      const playerObj = await PlayerHelpers.findOne({ gamertag: Tools.lowerCaseRegex(gamertag, true) });
+      const playerObj = await PlayerHelpers.findOnePlayerByGamertag({ gamertag: Tools.lowerCaseRegex(gamertag, true) });
 
       if (Validator.isNullOrUndefined(playerObj) || Validator.isNullOrUndefined(playerObj.gamertag)) {
         return res.status(400).json('No gamer found with passed gamertag');

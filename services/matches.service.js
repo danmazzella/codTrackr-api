@@ -105,7 +105,7 @@ const MatchesService = {
         return {};
       }
 
-      await RecentMatchStatsHelper.deleteMany({
+      await RecentMatchStatsHelper.deleteByGamertag({
         gamertag,
       });
 
@@ -114,7 +114,7 @@ const MatchesService = {
       summaryArr.map((summaryItem) => {
         const recentMatchStatsObj = CommonHelpers.createRecentMatchStatsObj(gamertag, summaryItem);
         return saveSummaryArr.push(RecentMatchStatsHelper
-          .upsert(
+          .upsertByGamertagModeType(
             {
               gamertag,
               modeType: recentMatchStatsObj.modeType,
@@ -147,7 +147,7 @@ const MatchesService = {
         }
 
         saveMatchesPromiseArr.push(MatchTeamsHelper
-          .upsert(
+          .upsertByMatchId(
             {
               matchId: matchObj.matchId,
             },
@@ -158,7 +158,7 @@ const MatchesService = {
           ));
 
         return saveMatchesPromiseArr.push(MatchesHelper
-          .upsert(
+          .upsertByMatchIdPlayerName(
             {
               matchId: matchObj.matchId,
               playerName: matchObj.playerName,
@@ -266,7 +266,7 @@ const MatchesService = {
         matchId,
       } = reqObj;
 
-      const match = await MatchesHelper.findOne({
+      const match = await MatchesHelper.findOneByMatchIdPlayerName({
         playerName: Tools.lowerCaseRegex(gamertag, true),
         matchId,
       });

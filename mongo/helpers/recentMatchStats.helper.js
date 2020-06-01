@@ -4,34 +4,8 @@ const mongoose = require('mongoose');
 // Model
 const RecentMatchStats = mongoose.model('RecentMatchStats');
 
-const MatchHelpers = {
-  build: obj => new Promise((resolve) => {
-    const newMatch = new RecentMatchStats(obj);
-
-    newMatch
-      .save()
-      .then(data => resolve(data))
-      .catch(err => resolve(err));
-  }),
-  find: (obj, project = {}, opt = {}) => new Promise((resolve) => {
-    RecentMatchStats
-      .find(obj, project, opt)
-      .then(data => resolve(data))
-      .catch(err => resolve(err));
-  }),
-  findOne: (obj, opts = {}, sort = {}) => new Promise((resolve) => {
-    RecentMatchStats
-      .findOne(obj, opts, sort)
-      .then(data => resolve(data))
-      .catch(err => resolve(err));
-  }),
-  updateOne: (find, update, opt) => new Promise((resolve) => {
-    RecentMatchStats
-      .updateOne(find, update, opt)
-      .then(data => resolve(data))
-      .catch(err => resolve(err));
-  }),
-  upsert: (findObj, updateObj) => new Promise((resolve) => {
+const RecentMatchStatsHelpers = {
+  upsertByGamertagModeType: (findObj, updateObj) => new Promise((resolve) => {
     RecentMatchStats
       .updateOne(
         findObj,
@@ -41,7 +15,7 @@ const MatchHelpers = {
       .then(data => resolve(data))
       .catch(err => resolve(err));
   }),
-  deleteMany: findObj => new Promise((resolve) => {
+  deleteByGamertag: findObj => new Promise((resolve) => {
     RecentMatchStats
       .deleteMany(findObj)
       .then(data => resolve(data))
@@ -85,4 +59,4 @@ const MatchHelpers = {
 };
 
 
-module.exports = MatchHelpers;
+module.exports = RecentMatchStatsHelpers;

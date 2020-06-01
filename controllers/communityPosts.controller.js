@@ -20,7 +20,7 @@ const CommunityPostsController = {
       title,
     } = req.body;
 
-    const createPost = await CommunityPostsHelper.build({
+    const createPost = await CommunityPostsHelper.createNewPost({
       author,
       content,
       title,
@@ -41,7 +41,7 @@ Approval URL: ${APIURL}/api/communityPosts/post/${createPost._id}/approve
     return res.status(200).json({ success: true, res: createPost });
   },
   getPosts: async (req, res) => {
-    const posts = await CommunityPostsHelper.find({ approved: true }, undefined, { sort: { _id: -1 } });
+    const posts = await CommunityPostsHelper.findAllPosts({ approved: true }, undefined, { sort: { _id: -1 } });
     return res.status(200).json({ success: true, posts });
   },
   approvePost: async (req, res) => {
@@ -50,7 +50,7 @@ Approval URL: ${APIURL}/api/communityPosts/post/${createPost._id}/approve
         postId,
       } = req.params;
 
-      const approveRes = await CommunityPostsHelper.updateOne(
+      const approveRes = await CommunityPostsHelper.approvePostByPostId(
         {
           _id: postId,
         },

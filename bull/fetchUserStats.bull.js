@@ -38,7 +38,7 @@ Bull.process(async (job, done) => {
     Logger.debug('\n\nFetch all users stats job processing', { date: new Date(), gamertag: userName });
     IO.emit('fetchingData', userName);
 
-    OptionsHelper.upsert(
+    OptionsHelper.upsertLastFetch(
       {
         key: LAST_DATA_FETCH,
       },
@@ -48,7 +48,7 @@ Bull.process(async (job, done) => {
       },
     );
 
-    const playerObj = await PlayerHelpers.findOne({ gamertag: Tools.lowerCaseRegex(userName, true) });
+    const playerObj = await PlayerHelpers.findOnePlayerByGamertag({ gamertag: Tools.lowerCaseRegex(userName, true) });
 
     const playerStats = await CODAPI.getMPStats(userName, playerObj.platform);
 

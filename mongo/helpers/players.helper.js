@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const Players = mongoose.model('Players');
 
 const PlayersHelpers = {
-  build: obj => new Promise((resolve) => {
+  addNewPlayer: obj => new Promise((resolve) => {
     const newMatch = new Players(obj);
 
     newMatch
@@ -13,31 +13,15 @@ const PlayersHelpers = {
       .then(data => resolve(data))
       .catch(err => resolve(err));
   }),
-  find: (obj, project = {}, opt = {}) => new Promise((resolve) => {
-    Players
-      .find(obj, project, opt)
-      .then(data => resolve(data))
-      .catch(err => resolve(err));
-  }),
-  findOne: (obj, opts = {}, sort = {}) => new Promise((resolve) => {
+  findOnePlayerByGamertag: (obj, opts = {}, sort = {}) => new Promise((resolve) => {
     Players
       .findOne(obj, opts, sort)
       .then(data => resolve(data))
       .catch(err => resolve(err));
   }),
-  updateOne: (find, update, opt) => new Promise((resolve) => {
+  findAllPlayers: (obj, project = {}, opt = {}) => new Promise((resolve) => {
     Players
-      .updateOne(find, update, opt)
-      .then(data => resolve(data))
-      .catch(err => resolve(err));
-  }),
-  upsert: (findObj, updateObj) => new Promise((resolve) => {
-    Players
-      .updateOne(
-        findObj,
-        updateObj,
-        { upsert: true },
-      )
+      .find(obj, project, opt)
       .then(data => resolve(data))
       .catch(err => resolve(err));
   }),

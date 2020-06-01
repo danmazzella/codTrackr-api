@@ -46,7 +46,7 @@ const PlayerController = {
       return res.status(mazzError.code).json(mazzError);
     }
 
-    const playerObj = await PlayerHelpers.build({
+    const playerObj = await PlayerHelpers.addNewPlayer({
       name, gamertag, platform,
     });
 
@@ -54,9 +54,9 @@ const PlayerController = {
   },
   getPlayers: async (req, res) => {
     try {
-      const players = await PlayerHelpers.find({});
+      const players = await PlayerHelpers.findAllPlayers({});
 
-      const lastFetch = await OptionsHelper.findOne({ key: LAST_DATA_FETCH });
+      const lastFetch = await OptionsHelper.findLastFetch({ key: LAST_DATA_FETCH });
 
       return res.status(200).json({ success: true, players, lastFetch: lastFetch.value });
     } catch (error) {
@@ -75,7 +75,7 @@ const PlayerController = {
         return res.status(mazzError.code).json(mazzError);
       }
 
-      const playerObj = await PlayerHelpers.findOne({ gamertag: Tools.lowerCaseRegex(gamertag, true) });
+      const playerObj = await PlayerHelpers.findOnePlayerByGamertag({ gamertag: Tools.lowerCaseRegex(gamertag, true) });
 
       if (Validator.isNullOrUndefined(playerObj) || Validator.isNullOrUndefined(playerObj.platform)) {
         return res.status(400).json(new MazzError().addParamError('Player not found in oCa database'));
@@ -145,7 +145,7 @@ const PlayerController = {
   },
   fetchLatestStatsMatches: async (req, res) => {
     try {
-      const lastFetchKey = await OptionsHelper.findOne({ key: LAST_DATA_FETCH });
+      const lastFetchKey = await OptionsHelper.findLastFetch({ key: LAST_DATA_FETCH });
 
       const lastFetchEpoch = lastFetchKey.value;
       const currentTimeEpoch = new Date().getTime();
