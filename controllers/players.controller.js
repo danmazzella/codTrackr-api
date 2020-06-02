@@ -61,6 +61,11 @@ const PlayerController = {
       return res.status(500).json(new MazzError().addServerError(error.message));
     }
   },
+  searchPlayers: async (req, res) => {
+    // TODO: Validate the params/query
+    const searchRes = await CODAPI.userSearch(req.params.gamertag, req.query.platform);
+    return res.status(200).json({ success: true, results: searchRes });
+  },
   fetchPlayerStats: async (req, res) => {
     try {
       const {

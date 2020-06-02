@@ -5,6 +5,34 @@ const router = express.Router();
 
 /**
  *  @swagger
+ *  /api/player/search/{gamertag}:
+ *    get:
+ *      tags: [ "PlayersController" ]
+ *      description: Search Players
+ *      parameters:
+ *        - name: gamertag
+ *          description: Players gamertag
+ *          in: path
+ *          schema:
+ *            type: string
+ *          required: true
+ *        - name: platform
+ *          description: Platform to search
+ *          in: query
+ *          schema:
+ *            type: string
+ *          enum: ["xbl", "psn", "battle", "all"]
+ *      responses:
+ *        200:
+ *          description: Server is up and running
+ *        default:
+ *          description: Something is wrong
+ */
+router.route('/player/search/:gamertag')
+  .get(PlayersController.searchPlayers);
+
+/**
+ *  @swagger
  *  /api/player:
  *    post:
  *      tags: [ "PlayersController" ]
