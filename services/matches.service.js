@@ -1,4 +1,5 @@
 // Utils
+const { arrayToRedisKey, replaceTemplateStrings } = require('../utils/tools');
 const CommonHelpers = require('../utils/commonHelpers');
 const { isNllOrUnd } = require('../utils/validator');
 const Logger = require('../utils/winston');
@@ -12,6 +13,12 @@ const MatchesHelper = require('../mongo/helpers/matches.helper');
 const MatchTeamsHelper = require('../mongo/helpers/matchTeams.helper');
 const RecentMatchStatsHelper = require('../mongo/helpers/recentMatchStats.helper');
 
+// Query Objects
+const { GET_MATCHES_QUERY } = require('../mongo/queryObjects/matches.query');
+
+// Redis
+const { NON_NULL_MATCHES } = require('../redis/keys');
+
 const MatchesService = {
   getMatches: async (reqObj) => {
     try {
@@ -22,58 +29,42 @@ const MatchesService = {
         players,
       } = reqObj;
 
-      let hasModeType = false;
+      const aggregateParams = {
+        '%PAGE%': (page - 1) * pageSize,
+        '%PAGE_SIZE%': pageSize,
+      };
+      let redisKey = NON_NULL_MATCHES;
+
       if (modeType === 'solos' || modeType === 'duos' || modeType === 'threes' || modeType === 'quads') {
-        hasModeType = true;
+        aggregateParams['%MODE_TYPE%'] = modeType;
+        redisKey = `${NON_NULL_MATCHES}-${modeType}`;
       }
 
-      let hasPlayers = false;
       if (!isNllOrUnd(players)) {
-        hasPlayers = true;
+        aggregateParams['%PLAYERS%'] = players;
+        redisKey = `${NON_NULL_MATCHES}-${arrayToRedisKey(players)}`;
       }
 
-      let aggregateResponse;
-      if (hasModeType === true && hasPlayers === true) {
-        aggregateResponse = await MatchesHelper.findNonNullWithModeAndPlayers(
-          {
-            '%MODE_TYPE%': modeType,
-            '%PLAYERS%': players,
-            '%PAGE%': (page - 1) * pageSize,
-            '%PAGE_SIZE%': pageSize,
-          },
-          {
-            modeType,
-            players,
-          },
-        );
-      } else if (hasModeType === true) {
-        aggregateResponse = await MatchesHelper.findNonNullWithMode(
-          {
-            '%MODE_TYPE%': modeType,
-            '%PAGE%': (page - 1) * pageSize,
-            '%PAGE_SIZE%': pageSize,
-          },
-          {
-            modeType,
-          },
-        );
-      } else if (hasPlayers === true) {
-        aggregateResponse = await MatchesHelper.findNonNullWithPlayers(
-          {
-            '%PLAYERS%': players,
-            '%PAGE%': (page - 1) * pageSize,
-            '%PAGE_SIZE%': pageSize,
-          },
-          {
-            players,
-          },
-        );
-      } else {
-        aggregateResponse = await MatchesHelper.findAllNonNullMatches({
-          '%PAGE%': (page - 1) * pageSize,
-          '%PAGE_SIZE%': pageSize,
-        });
+      const aggregateObject = replaceTemplateStrings(GET_MATCHES_QUERY, aggregateParams);
+
+      if (modeType === 'solos') {
+        aggregateObject[0].$match.modeType = 'Battle Royal Solos';
+      } else if (modeType === 'duos') {
+        aggregateObject[0].$match.modeType = 'Battle Royal Duos';
+      } else if (modeType === 'threes') {
+        aggregateObject[0].$match.modeType = 'Battle Royal Threes';
+      } else if (modeType === 'quads') {
+        aggregateObject[0].$match.modeType = 'Battle Royal Quads';
       }
+
+      if (players !== undefined) {
+        aggregateObject[0].$match.playerName = { $in: players };
+      }
+
+      const aggregateResponse = await MatchesHelper.findAllNonNullMatchesWithParams(
+        aggregateObject,
+        redisKey,
+      );
 
       return { success: true, matches: aggregateResponse.rows, totalCount: aggregateResponse.count };
     } catch (error) {
