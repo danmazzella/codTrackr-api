@@ -12,6 +12,10 @@ module.exports.deleteFromRedis = async (redisKey) => {
   redisClient.del(redisKey);
 };
 
+module.exports.deleteFromRedisWild = async (redisKey) => {
+  redisClient.keys(redisKey, (err, rows) => rows.forEach(row => redisClient.del(row)));
+};
+
 module.exports.getFromRedis = async (redisKey) => {
   const data = await getAsync(redisKey);
 
@@ -36,5 +40,5 @@ module.exports.setInRedis = async (redisKey, data) => {
 
 module.exports.clearRedisMatchKeys = () => {
   this.deleteFromRedis(NON_NULL_MATCHES);
-  this.deleteFromRedis(`${NON_NULL_MATCHES}-*`);
+  this.deleteFromRedisWild(`${NON_NULL_MATCHES}*`);
 };
