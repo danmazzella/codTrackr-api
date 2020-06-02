@@ -37,12 +37,12 @@ const MatchesService = {
 
       if (modeType === 'solos' || modeType === 'duos' || modeType === 'threes' || modeType === 'quads') {
         aggregateParams['%MODE_TYPE%'] = modeType;
-        redisKey = `${NON_NULL_MATCHES}-${modeType}`;
+        redisKey = `${redisKey}-${modeType}`;
       }
 
       if (!isNllOrUnd(players)) {
         aggregateParams['%PLAYERS%'] = players;
-        redisKey = `${NON_NULL_MATCHES}-${arrayToRedisKey(players)}`;
+        redisKey = `${redisKey}-${arrayToRedisKey(players)}`;
       }
 
       const aggregateObject = replaceTemplateStrings(GET_MATCHES_QUERY, aggregateParams);
