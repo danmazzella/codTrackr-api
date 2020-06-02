@@ -22,78 +22,58 @@ const MatchesService = {
         players,
       } = reqObj;
 
-      const aggregateObj = [
-        {
-          $match: {
-            placement: {
-              $ne: null,
-            },
-          },
-        },
-        {
-          $project: {
-            matchId: 1,
-            playerName: 1,
-            createdAt: 1,
-            mapName: 1,
-            matchDuration: 1,
-            matchTime: 1,
-            modeType: 1,
-            placement: 1,
-            playerCount: 1,
-            stats: 1,
-            updatedAt: 1,
-            players: 1,
-          },
-        },
-        {
-          $group: {
-            _id: '$matchId',
-            modeType: {
-              $last: '$modeType',
-            },
-            matchTime: {
-              $last: '$matchTime',
-            },
-            matchDuration: {
-              $last: '$matchDuration',
-            },
-            placement: {
-              $last: '$placement',
-            },
-            matches: {
-              $push: '$$ROOT',
-            },
-          },
-        },
-        {
-          $sort: {
-            matchTime: -1,
-          },
-        },
-        {
-          $skip: (page - 1) * pageSize,
-        },
-        {
-          $limit: pageSize,
-        },
-      ];
-
-      if (modeType === 'solos') {
-        aggregateObj[0].$match.modeType = 'Battle Royal Solos';
-      } else if (modeType === 'duos') {
-        aggregateObj[0].$match.modeType = 'Battle Royal Duos';
-      } else if (modeType === 'threes') {
-        aggregateObj[0].$match.modeType = 'Battle Royal Threes';
-      } else if (modeType === 'quads') {
-        aggregateObj[0].$match.modeType = 'Battle Royal Quads';
+      let hasModeType = false;
+      if (modeType === 'solos' || modeType === 'duos' || modeType === 'threes' || modeType === 'quads') {
+        hasModeType = true;
       }
 
-      if (players !== undefined) {
-        aggregateObj[0].$match.playerName = { $in: players };
+      let hasPlayers = false;
+      if (!isNllOrUnd(players)) {
+        hasPlayers = true;
       }
 
-      const aggregateResponse = await MatchesHelper.aggregateAndCount(aggregateObj);
+      let aggregateResponse;
+      if (hasModeType === true && hasPlayers === true) {
+        aggregateResponse = await MatchesHelper.findNonNullWithModeAndPlayers(
+          {
+            '%MODE_TYPE%': modeType,
+            '%PLAYERS%': players,
+            '%PAGE%': (page - 1) * pageSize,
+            '%PAGE_SIZE%': pageSize,
+          },
+          {
+            modeType,
+            players,
+          },
+        );
+      } else if (hasModeType === true) {
+        aggregateResponse = await MatchesHelper.findNonNullWithMode(
+          {
+            '%MODE_TYPE%': modeType,
+            '%PAGE%': (page - 1) * pageSize,
+            '%PAGE_SIZE%': pageSize,
+          },
+          {
+            modeType,
+          },
+        );
+      } else if (hasPlayers === true) {
+        aggregateResponse = await MatchesHelper.findNonNullWithPlayers(
+          {
+            '%PLAYERS%': players,
+            '%PAGE%': (page - 1) * pageSize,
+            '%PAGE_SIZE%': pageSize,
+          },
+          {
+            players,
+          },
+        );
+      } else {
+        aggregateResponse = await MatchesHelper.findAllNonNullMatches({
+          '%PAGE%': (page - 1) * pageSize,
+          '%PAGE_SIZE%': pageSize,
+        });
+      }
 
       return { success: true, matches: aggregateResponse.rows, totalCount: aggregateResponse.count };
     } catch (error) {
@@ -127,7 +107,7 @@ const MatchesService = {
           ));
       });
 
-      await Promise.all(saveSummaryArr);
+      await Promise.allSettled(saveSummaryArr);
 
       return {};
     } catch (error) {
@@ -171,7 +151,7 @@ const MatchesService = {
           ));
       });
 
-      await Promise.all(saveMatchesPromiseArr);
+      await Promise.allSettled(saveMatchesPromiseArr);
 
       return {};
     } catch (error) {

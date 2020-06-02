@@ -38,7 +38,7 @@ const PlayersService = {
         return null;
       });
 
-      await Promise.all(saveModeArr);
+      await Promise.allSettled(saveModeArr);
 
       return {};
     } catch (error) {

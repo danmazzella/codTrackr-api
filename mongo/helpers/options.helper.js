@@ -6,38 +6,28 @@ const Options = mongoose.model('Options');
 
 // Utils
 const { isNllOrUnd } = require('../../utils/validator');
-const Logger = require('../../utils/winston');
 
 // Redis
-const { getAsync, redisClient } = require('../../redis/redis');
+const { deleteFromRedis, getFromRedis, setInRedis } = require('../../redis/redis.helpers');
 const { LAST_FETCH } = require('../../redis/keys');
 
 const OptionsHelpers = {
   findLastFetch: (obj, opts = {}, sort = {}) => new Promise(async (resolve) => {
-    const options = await getAsync(LAST_FETCH);
+    const options = await getFromRedis(LAST_FETCH);
 
     if (!isNllOrUnd(options)) {
-      try {
-        const jsonOptions = JSON.parse(options);
-
-        if (jsonOptions.length > 0) {
-          return resolve(jsonOptions);
-        }
-      } catch (error) {
-        Logger.error('Unable to parse redis key: ', LAST_FETCH);
-      }
+      return resolve(options);
     }
 
     return Options
       .findOne(obj, opts, sort)
       .then((data) => {
-        redisClient.set(LAST_FETCH, JSON.stringify(data));
+        setInRedis(LAST_FETCH, data);
         return resolve(data);
       })
       .catch(err => resolve(err));
   }),
   upsertLastFetch: (findObj, updateObj) => new Promise((resolve) => {
-    // TODO: Clear redis
     Options
       .updateOne(
         findObj,
@@ -45,7 +35,7 @@ const OptionsHelpers = {
         { upsert: true },
       )
       .then((data) => {
-        redisClient.del(LAST_FETCH);
+        deleteFromRedis(LAST_FETCH);
         return resolve(data);
       })
       .catch(err => resolve(err));

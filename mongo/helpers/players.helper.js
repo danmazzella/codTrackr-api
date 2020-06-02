@@ -6,10 +6,9 @@ const Players = mongoose.model('Players');
 
 // Utils
 const { isNllOrUnd } = require('../../utils/validator');
-const Logger = require('../../utils/winston');
 
 // Redis
-const { getAsync, redisClient } = require('../../redis/redis');
+const { deleteFromRedis, getFromRedis, setInRedis } = require('../../redis/redis.helpers');
 const { ALL_PLAYERS } = require('../../redis/keys');
 
 const PlayersHelpers = {
@@ -19,7 +18,7 @@ const PlayersHelpers = {
     newMatch
       .save()
       .then((data) => {
-        redisClient.del(ALL_PLAYERS);
+        deleteFromRedis(ALL_PLAYERS);
         return resolve(data);
       })
       .catch(err => resolve(err));
@@ -31,24 +30,16 @@ const PlayersHelpers = {
       .catch(err => resolve(err));
   }),
   findAllPlayers: (obj, project = {}, opt = {}) => new Promise(async (resolve) => {
-    const players = await getAsync(ALL_PLAYERS);
+    const players = await getFromRedis(ALL_PLAYERS);
 
     if (!isNllOrUnd(players)) {
-      try {
-        const jsonPlayers = JSON.parse(players);
-
-        if (jsonPlayers.length > 0) {
-          return resolve(jsonPlayers);
-        }
-      } catch (error) {
-        Logger.error('Unable to parse redis key: ', ALL_PLAYERS);
-      }
+      return resolve(players);
     }
 
     return Players
       .find(obj, project, opt)
       .then((data) => {
-        redisClient.set(ALL_PLAYERS, JSON.stringify(data));
+        setInRedis(ALL_PLAYERS, data);
         return resolve(data);
       })
       .catch(err => resolve(err));

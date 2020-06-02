@@ -67,7 +67,7 @@ const ScriptController = {
       });
 
       // Wait for promise all
-      await Promise.all(savePromiseArr);
+      await Promise.allSettled(savePromiseArr);
 
       // Return response
       return res.status(200).json({ success: true });

@@ -1,4 +1,5 @@
 // Tools
+const { isNllOrUnd } = require('./validator');
 const Validator = require('./validator');
 
 const tools = {
@@ -78,12 +79,31 @@ const tools = {
 
 module.exports = tools;
 
+module.exports.arrayToRedisKey = array => array.join(', ').replace(/, /g, '').toLowerCase();
+
 module.exports.getKey = (obj, path, defaultValue = undefined) => {
-  const travel = regexp =>
+  const resultString = regexp =>
     String.prototype.split
       .call(path, regexp)
       .filter(Boolean)
       .reduce((res, key) => (res !== null && res !== undefined ? res[key] : res), obj);
-  const result = travel(/[,[\]]+?/) || travel(/[,[\].]+?/);
-  return result === undefined || result === obj ? defaultValue : result;
+  const finalResult = resultString(/[,[\]]+?/) || resultString(/[,[\].]+?/);
+  return finalResult === undefined || finalResult === obj ? defaultValue : finalResult;
+};
+
+module.exports.replaceTemplateStrings = (_template, stringObj) => {
+  let template = JSON.stringify(_template);
+  template = template.replace(/"%\w+%"/g, (_all) => {
+    const all = _all.replace(/"/g, '');
+    let value = all;
+    if (!isNllOrUnd(stringObj[all])) {
+      value = stringObj[all];
+
+      if (typeof stringObj[all] !== 'number') {
+        value = `"${value}"`;
+      }
+    }
+    return value;
+  });
+  return JSON.parse(template);
 };

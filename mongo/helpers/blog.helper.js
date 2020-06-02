@@ -6,10 +6,9 @@ const Blog = mongoose.model('Blog');
 
 // Utils
 const { isNllOrUnd } = require('../../utils/validator');
-const Logger = require('../../utils/winston');
 
 // Redis
-const { getAsync, redisClient } = require('../../redis/redis');
+const { deleteFromRedis, getFromRedis, setInRedis } = require('../../redis/redis.helpers');
 const { BLOG_POSTS } = require('../../redis/keys');
 
 const BlogHelpers = {
@@ -19,30 +18,22 @@ const BlogHelpers = {
     newBlogPost
       .save()
       .then((data) => {
-        redisClient.del(BLOG_POSTS);
+        deleteFromRedis(BLOG_POSTS);
         return resolve(data);
       })
       .catch(err => resolve(err));
   }),
   findAllPosts: (obj, project = {}, opt = {}) => new Promise(async (resolve) => {
-    const posts = await getAsync(BLOG_POSTS);
+    const posts = getFromRedis(BLOG_POSTS);
 
     if (!isNllOrUnd(posts)) {
-      try {
-        const jsonPosts = JSON.parse(posts);
-
-        if (jsonPosts.length > 0) {
-          return resolve(jsonPosts);
-        }
-      } catch (error) {
-        Logger.error('Unable to parse redis key: ', BLOG_POSTS);
-      }
+      return resolve(posts);
     }
 
     return Blog
       .find(obj, project, opt)
       .then((data) => {
-        redisClient.set(BLOG_POSTS, JSON.stringify(data));
+        setInRedis(BLOG_POSTS, data);
         return resolve(data);
       })
       .catch(err => resolve(err));
