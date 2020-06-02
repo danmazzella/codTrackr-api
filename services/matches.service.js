@@ -81,8 +81,12 @@ const MatchesService = {
 
       if (modeType === 'solos') {
         aggregateObj[0].$match.modeType = 'Battle Royal Solos';
+      } else if (modeType === 'duos') {
+        aggregateObj[0].$match.modeType = 'Battle Royal Duos';
       } else if (modeType === 'threes') {
         aggregateObj[0].$match.modeType = 'Battle Royal Threes';
+      } else if (modeType === 'quads') {
+        aggregateObj[0].$match.modeType = 'Battle Royal Quads';
       }
 
       if (players !== undefined) {
