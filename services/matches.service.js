@@ -45,6 +45,8 @@ const MatchesService = {
         redisKey = `${redisKey}-${arrayToRedisKey(players)}`;
       }
 
+      redisKey = `${redisKey}-${page - 1}-${pageSize}`;
+
       const aggregateObject = replaceTemplateStrings(GET_MATCHES_QUERY, aggregateParams);
 
       if (modeType === 'solos') {
