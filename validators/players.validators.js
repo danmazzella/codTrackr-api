@@ -29,7 +29,7 @@ const PlayersValidator = {
       mazzError.addParamError('Missing or invalid gamertag');
     }
 
-    if (isNllOrUnd(platform) || platform !== platforms.battle || platform !== platforms.psn || platform !== platforms.steam || platform !== platforms.xbl) {
+    if (isNllOrUnd(platform) || (platform !== platforms.battle && platform !== platforms.psn && platform !== platforms.steam && platform !== platforms.xbl && platform !== platforms.uno)) {
       mazzError.addParamError('Missing or invalid platform');
     }
 

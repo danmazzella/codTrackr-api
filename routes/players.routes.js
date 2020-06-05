@@ -21,7 +21,12 @@ const router = express.Router();
  *          in: query
  *          schema:
  *            type: string
- *          enum: ["xbl", "psn", "battle", "all"]
+ *            enum:
+ *              - xbl
+ *              - psn
+ *              - battle
+ *              - uno
+ *              - all
  *      responses:
  *        200:
  *          description: Server is up and running
@@ -54,6 +59,12 @@ router.route('/player/search/:gamertag')
  *                platform:
  *                 type: string
  *                 description: Players platform
+ *                 enum:
+ *                  - xbl
+ *                  - psn
+ *                  - battle
+ *                  - uno
+ *                  - all
  *              required:
  *                - name
  *                - gamertag

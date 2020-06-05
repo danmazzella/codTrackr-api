@@ -145,3 +145,5 @@ const CODAPI = {
 };
 
 module.exports = CODAPI;
+
+// https://my.callofduty.com/content/atvi/callofduty/mycod/web/en/data/json/iq-content-xweb.js

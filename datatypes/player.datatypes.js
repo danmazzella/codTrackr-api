@@ -3,6 +3,7 @@ module.exports.platforms = {
   steam: 'steam',
   psn: 'psn',
   xbl: 'xbl',
+  uno: 'uno',
 };
 
 module.exports.defaultPlatform = 'xbl';
