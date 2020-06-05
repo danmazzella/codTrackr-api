@@ -24,7 +24,7 @@ const BlogHelpers = {
       .catch(err => resolve(err));
   }),
   findAllPosts: (obj, project = {}, opt = {}) => new Promise(async (resolve) => {
-    const posts = getFromRedis(BLOG_POSTS);
+    const posts = await getFromRedis(BLOG_POSTS);
 
     if (!isNllOrUnd(posts)) {
       return resolve(posts);

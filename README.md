@@ -9,25 +9,45 @@
 ###### On first run it will create a config/config.environment.js file. You will need to update that file with all the data required before the API will successfully start. It uses the Call of Duty API to retrieve match information for players that are added into the DB. It'll get the most recent games for every player in the DB every hour.
 
 ### Installation Instructions for MacOS:
-###### Install HomeBrew from their website
+###### Install HomeBrew from their website (MacOS)
 https://brew.sh/
 
 ###### Install and Start MongoDB
+- MacOS
 ```
 brew tap mongodb/brew
 brew install mongodb-community@4.2
 brew services start mongodb-community@4.2
 ```
+- Ubuntu 16.04
+```
+wget -qO - https://www.mongodb.org/static/pgp/server-4.2.asc | sudo apt-key add -
+echo "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/4.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.2.list
+sudo apt update
+sudo apt install -y mongodb-org
+sudo systemctl enable --now mongod
+```
 
 ###### Install and Start Redis
+- Mac OS
 ```
 brew install redis
 brew services start redis
 ```
+- Ubuntu 16.04
+```
+sudo apt-get install redis-server
+```
 
 ###### Install NodeJS
+- Mac OS
 ```
 brew install node@12
+```
+- Ubuntu 16.04
+```
+curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
+sudo apt install nodejs
 ```
 
 ###### Create Mongo User
@@ -95,7 +115,13 @@ Ex: `http://localhost:8081/api-docs`
 ###### Add a player to your database
 ![AddPlayer](https://i.ibb.co/Z2TJGGT/addplayer.png)
 
-###### To run the API in PROD mode
+
+##### To run the API in PROD mode
+###### Install PM2
+```
+sudo npm i pm2 -g
+```
+###### Start Node
 ```
 npm run prod
 ```
