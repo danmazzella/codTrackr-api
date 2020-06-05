@@ -64,7 +64,6 @@ router.route('/player/search/:gamertag')
  *                  - psn
  *                  - battle
  *                  - uno
- *                  - all
  *              required:
  *                - name
  *                - gamertag
