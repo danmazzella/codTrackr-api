@@ -136,10 +136,10 @@ const PlayersService = {
             },
             highestOcaScore: '$highestOcaScore',
             winPercent: {
-              $divide: ['$data.wins', '$count'],
+              $divide: ['$data.wins', '$data.gamesPlayed'],
             },
             killsPerGame: {
-              $divide: ['$data.kills', '$count'],
+              $divide: ['$data.kills', '$data.gamesPlayed'],
             },
           },
         },
