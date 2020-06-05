@@ -10,7 +10,7 @@
 
 ### Installation Instructions for MacOS:
 ###### Install HomeBrew from their website
-```https://brew.sh/```
+https://brew.sh/
 
 ###### Install and Start MongoDB
 ```
@@ -94,3 +94,8 @@ Ex: `http://localhost:8081/api-docs`
 
 ###### Add a player to your database
 ![AddPlayer](https://i.ibb.co/Z2TJGGT/addplayer.png)
+
+###### To run the API in PROD mode
+```
+npm run prod
+```
