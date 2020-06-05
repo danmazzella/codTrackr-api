@@ -1,5 +1,6 @@
 // Utils
 const { isNllOrUnd } = require('./validator');
+const { getKey } = require('./tools');
 const Logger = require('./winston');
 
 const CommonHelpers = {
@@ -81,29 +82,33 @@ const CommonHelpers = {
       }
 
       // Get placement from the ranked teams
-      const rankedTeamIndex = match.rankedTeams.findIndex((rankedTeam) => {
-        if (isNllOrUnd(rankedTeam.players)) {
-          return false;
-        }
-
-        const playerIndex = rankedTeam.players.findIndex((player) => {
-          let matchPlayerName = player.username;
-          if (!isNllOrUnd(player.clantag)) {
-            matchPlayerName = `[${player.clantag}]${player.username}`;
+      if (!isNllOrUnd(match.rankedTeams)) {
+        const rankedTeamIndex = match.rankedTeams.findIndex((rankedTeam) => {
+          if (isNllOrUnd(rankedTeam.players)) {
+            return false;
           }
-          return player.username === playerName || matchPlayerName === playerName;
-        });
-        if (playerIndex > -1) {
-          return true;
-        }
-        return false;
-      });
 
-      if (rankedTeamIndex > -1 && !isNllOrUnd(match.rankedTeams[rankedTeamIndex])) {
-        if (!isNllOrUnd(match.rankedTeams[rankedTeamIndex].players)) {
-          matchObj.players = match.rankedTeams[rankedTeamIndex].players.map(player => player.username);
+          const playerIndex = rankedTeam.players.findIndex((player) => {
+            let matchPlayerName = player.username;
+            if (!isNllOrUnd(player.clantag)) {
+              matchPlayerName = `[${player.clantag}]${player.username}`;
+            }
+            return player.username === playerName || matchPlayerName === playerName;
+          });
+          if (playerIndex > -1) {
+            return true;
+          }
+          return false;
+        });
+
+        if (rankedTeamIndex > -1 && !isNllOrUnd(match.rankedTeams[rankedTeamIndex])) {
+          if (!isNllOrUnd(match.rankedTeams[rankedTeamIndex].players)) {
+            matchObj.players = match.rankedTeams[rankedTeamIndex].players.map(player => player.username);
+          }
+          matchObj.placement = rankedTeamIndex + 1;
         }
-        matchObj.placement = rankedTeamIndex + 1;
+      } else {
+        matchObj.players = [];
       }
 
       matchObj.stats.ocaScore = CommonHelpers.calculateOcaScore(matchObj);
