@@ -1,6 +1,9 @@
 // NPM Libraries
 let PatrolMan = require('patrolman');
 
+// Utils
+const { isNllOrUnd } = require('../utils/validator');
+
 // Helpers
 const BlogHelper = require('../mongo/helpers/blog.helper');
 
@@ -30,7 +33,12 @@ const BlogController = {
     return res.status(200).json({ success: true, res: createPost });
   },
   getPosts: async (req, res) => {
-    const posts = await BlogHelper.findAllPosts({}, undefined, { sort: { _id: -1 } });
+    let posts = await BlogHelper.findAllPosts({}, undefined, { sort: { _id: -1 } });
+
+    if (isNllOrUnd(posts)) {
+      posts = [];
+    }
+
     return res.status(200).json({ success: true, posts });
   },
 };

@@ -6,6 +6,7 @@ const APIURL = require('../config/config.environment')[process.env.NODE_ENV].url
 
 // Utils
 const Emailer = require('../utils/emailer');
+const { isNllOrUnd } = require('../utils/validator');
 const Logger = require('../utils/winston');
 const MazzError = require('../utils/mazzErrors');
 
@@ -50,7 +51,12 @@ Approval URL: ${APIURL}/api/communityPosts/post/${createPost._id}/approve
     return res.status(200).json({ success: true, res: createPost });
   },
   getPosts: async (req, res) => {
-    const posts = await CommunityPostsHelper.findAllPosts({ approved: true }, undefined, { sort: { _id: -1 } });
+    let posts = await CommunityPostsHelper.findAllPosts({ approved: true }, undefined, { sort: { _id: -1 } });
+
+    if (isNllOrUnd(posts)) {
+      posts = [];
+    }
+
     return res.status(200).json({ success: true, posts });
   },
   approvePost: async (req, res) => {
