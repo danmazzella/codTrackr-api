@@ -141,6 +141,15 @@ const PlayersService = {
             killsPerGame: {
               $divide: ['$data.kills', '$data.gamesPlayed'],
             },
+            downsPerGame: {
+              $divide: ['$data.downs', '$data.gamesPlayed'],
+            },
+            topFivePercent: {
+              $divide: ['$data.topFive', '$data.gamesPlayed'],
+            },
+            topTenPercent: {
+              $divide: ['$data.topTen', '$data.gamesPlayed'],
+            },
           },
         },
         {
