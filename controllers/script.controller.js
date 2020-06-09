@@ -92,14 +92,36 @@ const ScriptController = {
         return res.status(400).json(new MazzError().addParamError('Invalid gamertag'));
       }
 
-      fetchAllMatchesForUser({
+      const createFetch = await fetchAllMatchesForUser({
         gamertag: playerObj.gamertag,
         platform: playerObj.platform,
         startTime: 1581196358000,
         endTime: 1586380358000,
       });
 
-      return { success: true };
+      return res.status(200).json({ success: true, fetch: createFetch });
+    } catch (error) {
+      Logger.error('Unable to fetch all matches for user: ', error);
+      return res.status(500).json(new MazzError().addServerError(error.message));
+    }
+  },
+  fetchAllMatches: async (req, res) => {
+    try {
+      const players = await PlayersHelper.findAllPlayers({});
+
+      const fetchAllArray = [];
+      players.forEach((player) => {
+        fetchAllArray.push(fetchAllMatchesForUser({
+          gamertag: player.gamertag,
+          platform: player.platform,
+          startTime: 1581196358000,
+          endTime: 1586380358000,
+        }));
+      });
+
+      const fetchAllResults = await Promise.allSettled(fetchAllArray);
+
+      return res.status(200).json({ success: true, fetch: fetchAllResults });
     } catch (error) {
       Logger.error('Unable to fetch all matches for user: ', error);
       return res.status(500).json(new MazzError().addServerError(error.message));

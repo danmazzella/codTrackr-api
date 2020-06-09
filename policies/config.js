@@ -18,5 +18,6 @@ module.exports = {
   script: {
     '*': [Policies.all],
     fetchAllMatchesForUser: [Policies.isAdmin],
+    fetchAllMatches: [Policies.isAdmin],
   },
 };

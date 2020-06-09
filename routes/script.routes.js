@@ -41,4 +41,21 @@ router.route('/scripts/updateOcaScore')
 router.route('/scripts/fetchAllUsersMatches')
   .post(ScriptsController.fetchAllMatchesForUser);
 
+/**
+ *  @swagger
+ *  /api/scripts/fetchAllMatches:
+ *    post:
+ *      tags: [ "ScriptsController" ]
+ *      security:
+ *        - ApiKeyAuth: []
+ *      description: Fetch all lifetime matches for all users
+ *      responses:
+ *        200:
+ *          description: Server is up and running
+ *        default:
+ *          description: Something is wrong
+ */
+router.route('/scripts/fetchAllMatches')
+  .post(ScriptsController.fetchAllMatches);
+
 module.exports = router;
