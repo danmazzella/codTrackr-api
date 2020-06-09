@@ -96,7 +96,7 @@ const ScriptController = {
         gamertag: playerObj.gamertag,
         platform: playerObj.platform,
         startTime: 1581196358000,
-        endTime: 1586380358000,
+        endTime: new Date().getTime(),
       });
 
       return res.status(200).json({ success: true, fetch: createFetch });
@@ -115,7 +115,7 @@ const ScriptController = {
           gamertag: player.gamertag,
           platform: player.platform,
           startTime: 1581196358000,
-          endTime: 1586380358000,
+          endTime: new Date().getTime(),
         }));
       });
 

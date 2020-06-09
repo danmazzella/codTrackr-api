@@ -50,22 +50,26 @@ Bull.process(async (job, done) => {
 
     const playerObj = await PlayerHelpers.findOnePlayerByGamertag({ gamertag: Tools.lowerCaseRegex(userName, true) });
 
-    const playerStats = await CODAPI.getMPStats(userName, playerObj.platform);
+    const CODAPIFetches = [];
+    CODAPIFetches.push(CODAPI.getMPStats(userName, playerObj.platform));
+    CODAPIFetches.push(CODAPI.warzoneLatestMatches(userName, playerObj.platform));
 
-    await PlayerService.savePlayerStats(userName, playerStats);
+    const [playerStats, matchesRaw] = await Promise.allSettled(CODAPIFetches);
 
-    const matchesRaw = await CODAPI.warzoneLatestMatches(userName, playerObj.platform);
+    const saveAPIFetches = [];
+    saveAPIFetches.push(PlayerService.savePlayerStats(userName, playerStats.value));
+    saveAPIFetches.push(MatchesService.saveRecentMatchStats(userName, matchesRaw.value));
 
-    await MatchesService.saveRecentMatchStats(userName, matchesRaw);
-
-    const matchesArray = matchesRaw.matches;
+    const matchesArray = matchesRaw.value.matches;
 
     if (matchesArray === null) {
+      await Promise.allSettled(saveAPIFetches);
       Logger.debug('Matches array was null');
       return done();
     }
 
-    await MatchesService.saveMatchesForUser(userName, matchesArray);
+    saveAPIFetches.push(MatchesService.saveMatchesForUser(userName, matchesArray));
+    await Promise.allSettled(saveAPIFetches);
 
     Logger.info('Fetch all users stats complete!', { success: true, gamertag: userName }, '\n\n');
 
