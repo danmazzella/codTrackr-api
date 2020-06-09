@@ -1,3 +1,6 @@
+// NPM Libraries
+const fs = require('fs');
+
 // Utils
 const { arrayToRedisKey, replaceTemplateStrings } = require('../utils/tools');
 const CommonHelpers = require('../utils/commonHelpers');
@@ -90,6 +93,11 @@ const MatchesService = {
       const saveSummaryArr = [];
       summaryArr.map((summaryItem) => {
         const recentMatchStatsObj = CommonHelpers.createRecentMatchStatsObj(gamertag, summaryItem);
+        if (gamertag === 'Trixat') {
+          const tmpRecentObj = recentMatchStatsObj;
+          tmpRecentObj.date = new Date();
+          fs.appendFileSync('./recentStats', JSON.stringify(tmpRecentObj).concat('\n\n'));
+        }
         return saveSummaryArr.push(RecentMatchStatsHelper
           .upsertByGamertagModeType(
             {

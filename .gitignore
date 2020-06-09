@@ -35,3 +35,6 @@ npm-debug.log
 
 # The config with user passwords
 config/config.environment.js
+
+# Test File
+recentStats
