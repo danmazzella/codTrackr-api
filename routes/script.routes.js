@@ -8,7 +8,7 @@ const router = express.Router();
  *  /api/scripts/updateOcaScore:
  *    post:
  *      tags: [ "ScriptsController" ]
- *      description: Update oCa Score for all matches
+ *      summary: Update oCa Score for all matches
  *      responses:
  *        200:
  *          description: Server is up and running
@@ -25,7 +25,7 @@ router.route('/scripts/updateOcaScore')
  *      tags: [ "ScriptsController" ]
  *      security:
  *        - ApiKeyAuth: []
- *      description: Fetch all lifetime matches for a user
+ *      summary: Fetch all lifetime matches for a user
  *      parameters:
  *        - name: gamertag
  *          description: The desired gamertag
@@ -48,7 +48,7 @@ router.route('/scripts/fetchAllUsersMatches')
  *      tags: [ "ScriptsController" ]
  *      security:
  *        - ApiKeyAuth: []
- *      description: Fetch all lifetime matches for all users
+ *      summary: Fetch all lifetime matches for all users
  *      responses:
  *        200:
  *          description: Server is up and running

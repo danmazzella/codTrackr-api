@@ -8,7 +8,7 @@ const router = express.Router();
  *  /api/communityPosts/post:
  *    post:
  *      tags: [ "CommunityPostsController" ]
- *      description: Create a communityPosts post
+ *      summary: Create a communityPosts post
  *      requestBody:
  *        content:
  *          application/x-www-form-urlencoded:
@@ -42,7 +42,7 @@ router.route('/communityPosts/post')
  *  /api/communityPosts/posts:
  *    get:
  *      tags: [ "CommunityPostsController" ]
- *      description: Get communityPosts posts
+ *      summary: Get communityPosts posts
  *      parameters:
  *        - name: page
  *          description: The page
@@ -71,7 +71,7 @@ router.route('/communityPosts/posts')
  *  /api/communityPosts/post/{postId}/approve:
  *    get:
  *      tags: [ "CommunityPostsController" ]
- *      description: Approve a community post
+ *      summary: Approve a community post
  *      parameters:
  *        - name: postId
  *          description: ID of the post

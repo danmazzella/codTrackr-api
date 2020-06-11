@@ -8,7 +8,7 @@ const router = express.Router();
  *  /api/matches:
  *    get:
  *      tags: [ "MatchesController" ]
- *      description: Get all matches
+ *      summary: Get all matches
  *      parameters:
  *        - name: page
  *          description: The page
@@ -51,7 +51,7 @@ router.route('/matches')
  *  /api/match/{matchId}:
  *    get:
  *      tags: [ "MatchesController" ]
- *      description: Get single match
+ *      summary: Get single match
  *      parameters:
  *        - name: matchId
  *          description: MatchId of desired match
@@ -80,7 +80,7 @@ router.route('/match/:matchId')
  *  /api/matches/fetchLatest/{gamertag}:
  *    put:
  *      tags: [ "MatchesController" ]
- *      description: Fetch latest matches for a player
+ *      summary: Fetch latest matches for a player
  *      parameters:
  *        - name: gamertag
  *          description: The desired gamertag
@@ -102,7 +102,7 @@ router.route('/matches/fetchLatest/:gamertag')
  *  /api/matches/topFive:
  *    get:
  *      tags: [ "MatchesController" ]
- *      description: Get top five matches for players
+ *      summary: Get top five matches for players
  *      parameters:
  *        - name: page
  *          description: The page

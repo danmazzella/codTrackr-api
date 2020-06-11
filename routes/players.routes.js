@@ -8,7 +8,7 @@ const router = express.Router();
  *  /api/player/search/{gamertag}:
  *    get:
  *      tags: [ "PlayersController" ]
- *      description: Search Players
+ *      summary: Search Players
  *      parameters:
  *        - name: gamertag
  *          description: Players gamertag
@@ -43,7 +43,7 @@ router.route('/player/search/:gamertag')
  *      tags: [ "PlayersController" ]
  *      security:
  *        - ApiKeyAuth: []
- *      description: Create a player
+ *      summary: Create a player
  *      requestBody:
  *        content:
  *          application/x-www-form-urlencoded:
@@ -82,7 +82,7 @@ router.route('/player')
  *  /api/player/fetchStats/{gamertag}:
  *    put:
  *      tags: [ "PlayersController" ]
- *      description: Fetch a players stats
+ *      summary: Fetch a players stats
  *      parameters:
  *        - name: gamertag
  *          description: Players gamertag
@@ -104,7 +104,7 @@ router.route('/player/fetchStats/:gamertag')
  *  /api/players:
  *    get:
  *      tags: [ "PlayersController" ]
- *      description: Get all players
+ *      summary: Get all players
  *      responses:
  *        200:
  *          description: Server is up and running
@@ -119,7 +119,7 @@ router.route('/players')
  *  /api/players/fetchLatestStatsMatches:
  *    post:
  *      tags: [ "PlayersController" ]
- *      description: Fetch stats/matches for all users
+ *      summary: Fetch stats/matches for all users
  *      responses:
  *        200:
  *          description: Server is up and running
@@ -134,7 +134,7 @@ router.route('/players/fetchLatestStatsMatches')
  *  /api/player/stats/lifetime:
  *    get:
  *      tags: [ "PlayersController" ]
- *      description: Get lifetime stats for all players
+ *      summary: Get lifetime stats for all players
  *      parameters:
  *        - name: page
  *          description: The page
@@ -190,7 +190,7 @@ router.route('/player/stats/lifetime')
  *  /api/player/stats/recent:
  *    get:
  *      tags: [ "PlayersController" ]
- *      description: Get recent match stats
+ *      summary: Get recent match stats
  *      parameters:
  *        - name: page
  *          description: The page

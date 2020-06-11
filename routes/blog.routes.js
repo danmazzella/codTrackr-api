@@ -10,7 +10,7 @@ const router = express.Router();
  *      tags: [ "BlogController" ]
  *      security:
  *        - ApiKeyAuth: []
- *      description: Create a blog post
+ *      summary: Create a blog post
  *      requestBody:
  *        content:
  *          application/x-www-form-urlencoded:
@@ -47,7 +47,7 @@ router.route('/blog/post')
  *  /api/blog/posts:
  *    get:
  *      tags: [ "BlogController" ]
- *      description: Get blog posts
+ *      summary: Get blog posts
  *      parameters:
  *        - name: page
  *          description: The page
