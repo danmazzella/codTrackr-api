@@ -28,6 +28,8 @@ const CommonHelpers = {
         matchType = 'Battle Royal Duos';
       } else if (match.mode === 'br_77') {
         matchType = 'Scopes And Scatterguns';
+      } else if (match.mode === 'brtdm_113') {
+        matchType = 'TDM 50v50';
       } else if (!isNllOrUnd(match.mode)) {
         matchType = match.mode;
       }
@@ -142,6 +144,8 @@ const CommonHelpers = {
       matchType = 'Battle Royal Duos';
     } else if (statsObj.key === 'br_77') {
       matchType = 'Scopes And Scatterguns';
+    } else if (statsObj.key === 'brtdm_113') {
+      matchType = 'TDM 50v50';
     } else if (!isNllOrUnd(statsObj.key)) {
       matchType = statsObj.key;
     }
