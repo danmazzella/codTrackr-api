@@ -32,6 +32,7 @@ const MatchesController = {
         page,
         pageSize,
         players,
+        topTen,
       } = MatchesValidator.getMatches(req);
 
       const returnObj = await MatchesService.getMatches({
@@ -39,6 +40,7 @@ const MatchesController = {
         page,
         pageSize,
         players,
+        topTen,
       });
 
       return res.status(200).json(returnObj);

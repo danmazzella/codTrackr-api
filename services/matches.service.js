@@ -30,6 +30,7 @@ const MatchesService = {
         page,
         pageSize,
         players,
+        topTen,
       } = reqObj;
 
       const aggregateParams = {
@@ -48,6 +49,11 @@ const MatchesService = {
         redisKey = `${redisKey}-${arrayToRedisKey(players)}`;
       }
 
+      if (topTen === true) {
+        aggregateParams['%TOP_TEN%'] = topTen;
+        redisKey = `${redisKey}-topTen`;
+      }
+
       redisKey = `${redisKey}-${page - 1}-${pageSize}`;
 
       const aggregateObject = replaceTemplateStrings(GET_MATCHES_QUERY, aggregateParams);
@@ -64,6 +70,12 @@ const MatchesService = {
 
       if (players !== undefined) {
         aggregateObject[0].$match.playerName = { $in: players };
+      }
+
+      if (topTen === true) {
+        aggregateObject[0].$match.placement = {
+          $lte: 10,
+        };
       }
 
       const aggregateResponse = await MatchesHelper.findAllNonNullMatchesWithParams(

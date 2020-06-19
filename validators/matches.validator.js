@@ -11,12 +11,14 @@ const MatchesValidator = {
       page: _page,
       pageSize: _pageSize,
       players: _players,
+      topTen: _topTen,
     } = req.query;
 
     let modeType = _modeType;
     let page = Tools.toInteger(_page);
     let pageSize = Tools.toInteger(_pageSize);
     let players = Tools.toArray(_players);
+    let topTen = Tools.toBoolean(_topTen);
 
     if (!Validator.isValidId(page)) {
       page = 1;
@@ -39,6 +41,7 @@ const MatchesValidator = {
       page,
       pageSize,
       players,
+      topTen,
     };
   },
   getTopFiveGames: (req) => {
