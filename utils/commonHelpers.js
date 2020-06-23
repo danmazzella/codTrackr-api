@@ -4,35 +4,40 @@ const { getKey } = require('./tools');
 const Logger = require('./winston');
 
 const CommonHelpers = {
+  getGameModeType: (gameMode) => {
+    let newGameMode = 'Unknown';
+    if (gameMode === 'br_25') {
+      newGameMode = 'Battle Royal Threes';
+    } else if (gameMode === 'br_87') {
+      newGameMode = 'Battle Royal Solos';
+    } else if (gameMode === 'br_dmz_104') {
+      newGameMode = 'Plunder Threes';
+    } else if (gameMode === 'br_dmz_76' || gameMode === 'br_dmz.38') {
+      newGameMode = 'Plunder Quads';
+    } else if (gameMode === 'br_dmz_85') {
+      newGameMode = 'Plunder Duos';
+    } else if (gameMode === 'br_71') {
+      newGameMode = 'Stimulus Solos';
+    } else if (gameMode === 'br_89') {
+      newGameMode = 'Battle Royal Quads';
+    } else if (gameMode === 'br_88') {
+      newGameMode = 'Battle Royal Duos';
+    } else if (gameMode === 'br_77') {
+      newGameMode = 'Scopes And Scatterguns';
+    } else if (gameMode === 'brtdm_113') {
+      newGameMode = 'TDM 50v50';
+    } else if (gameMode === 'br_86' || gameMode === 'br_br_real') {
+      newGameMode = 'Realism Quads';
+    } else if (!isNllOrUnd(gameMode)) {
+      newGameMode = gameMode;
+    }
+    return newGameMode;
+  },
   // Convert match into the Mongo match object
   createMatchObj: (userName, match) => {
     try {
       const stats = match.playerStats;
-
-      let matchType = 'Unknown';
-      if (match.mode === 'br_25') {
-        matchType = 'Battle Royal Threes';
-      } else if (match.mode === 'br_87') {
-        matchType = 'Battle Royal Solos';
-      } else if (match.mode === 'br_dmz_104') {
-        matchType = 'Plunder Threes';
-      } else if (match.mode === 'br_dmz_76' || match.mode === 'br_dmz.38') {
-        matchType = 'Plunder Quads';
-      } else if (match.mode === 'br_dmz_85') {
-        matchType = 'Plunder Duos';
-      } else if (match.mode === 'br_71') {
-        matchType = 'Stimulus Solos';
-      } else if (match.mode === 'br_89') {
-        matchType = 'Battle Royal Quads';
-      } else if (match.mode === 'br_88') {
-        matchType = 'Battle Royal Duos';
-      } else if (match.mode === 'br_77') {
-        matchType = 'Scopes And Scatterguns';
-      } else if (match.mode === 'brtdm_113') {
-        matchType = 'TDM 50v50';
-      } else if (!isNllOrUnd(match.mode)) {
-        matchType = match.mode;
-      }
+      const matchType = CommonHelpers.getGameModeType(match.mode);
 
       const matchObj = {
         matchId: match.matchID,
@@ -123,32 +128,7 @@ const CommonHelpers = {
   },
   // Convert the recent match stats into the Mongo stats object
   createRecentMatchStatsObj: (playerName, statsObj) => {
-    let matchType = 'Unknown';
-    if (statsObj.key === 'all') {
-      matchType = 'All';
-    } else if (statsObj.key === 'br_25') {
-      matchType = 'Battle Royal Threes';
-    } else if (statsObj.key === 'br_87') {
-      matchType = 'Battle Royal Solos';
-    } else if (statsObj.key === 'br_dmz_104') {
-      matchType = 'Plunder Threes';
-    } else if (statsObj.key === 'br_dmz_76' || statsObj.key === 'br_dmz.38') {
-      matchType = 'Plunder Quads';
-    } else if (statsObj.key === 'br_dmz_85') {
-      matchType = 'Plunder Duos';
-    } else if (statsObj.key === 'br_71') {
-      matchType = 'Stimulus Solos';
-    } else if (statsObj.key === 'br_89') {
-      matchType = 'Battle Royal Quads';
-    } else if (statsObj.key === 'br_88') {
-      matchType = 'Battle Royal Duos';
-    } else if (statsObj.key === 'br_77') {
-      matchType = 'Scopes And Scatterguns';
-    } else if (statsObj.key === 'brtdm_113') {
-      matchType = 'TDM 50v50';
-    } else if (!isNllOrUnd(statsObj.key)) {
-      matchType = statsObj.key;
-    }
+    const matchType = CommonHelpers.getGameModeType(statsObj.key);
 
     const returnStatsObj = {
       gamertag: playerName,
