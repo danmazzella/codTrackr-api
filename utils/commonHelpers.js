@@ -6,28 +6,28 @@ const Logger = require('./winston');
 const CommonHelpers = {
   getGameModeType: (gameMode) => {
     let newGameMode = 'Unknown';
-    if (gameMode === 'br_25') {
-      newGameMode = 'Battle Royal Threes';
-    } else if (gameMode === 'br_87') {
+    if (gameMode === 'br_87' || gameMode === 'br_brsolo') {
       newGameMode = 'Battle Royal Solos';
+    } else if (gameMode === 'br_88' || gameMode === 'br_brduos') {
+      newGameMode = 'Battle Royal Duos';
+    } else if (gameMode === 'br_25' || gameMode === 'br_brtrios') {
+      newGameMode = 'Battle Royal Threes';
+    } else if (gameMode === 'br_89') {
+      newGameMode = 'Battle Royal Quads';
+    } else if (gameMode === 'br_86' || gameMode === 'br_br_real') {
+      newGameMode = 'Realism Quads';
+    } else if (gameMode === 'br_dmz_85') {
+      newGameMode = 'Plunder Duos';
     } else if (gameMode === 'br_dmz_104') {
       newGameMode = 'Plunder Threes';
     } else if (gameMode === 'br_dmz_76' || gameMode === 'br_dmz.38') {
       newGameMode = 'Plunder Quads';
-    } else if (gameMode === 'br_dmz_85') {
-      newGameMode = 'Plunder Duos';
     } else if (gameMode === 'br_71') {
       newGameMode = 'Stimulus Solos';
-    } else if (gameMode === 'br_89') {
-      newGameMode = 'Battle Royal Quads';
-    } else if (gameMode === 'br_88') {
-      newGameMode = 'Battle Royal Duos';
     } else if (gameMode === 'br_77') {
       newGameMode = 'Scopes And Scatterguns';
     } else if (gameMode === 'brtdm_113') {
       newGameMode = 'TDM 50v50';
-    } else if (gameMode === 'br_86' || gameMode === 'br_br_real') {
-      newGameMode = 'Realism Quads';
     } else if (!isNllOrUnd(gameMode)) {
       newGameMode = gameMode;
     }
