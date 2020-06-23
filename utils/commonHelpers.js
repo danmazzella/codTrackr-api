@@ -20,7 +20,7 @@ const CommonHelpers = {
       newGameMode = 'Plunder Duos';
     } else if (gameMode === 'br_dmz_104') {
       newGameMode = 'Plunder Threes';
-    } else if (gameMode === 'br_dmz_76' || gameMode === 'br_dmz.38') {
+    } else if (gameMode === 'br_dmz_76' || gameMode === 'br_dmz_38') {
       newGameMode = 'Plunder Quads';
     } else if (gameMode === 'br_71') {
       newGameMode = 'Stimulus Solos';
