@@ -10,9 +10,9 @@ const CommonHelpers = {
       newGameMode = 'Battle Royal Solos';
     } else if (gameMode === 'br_88' || gameMode === 'br_brduos') {
       newGameMode = 'Battle Royal Duos';
-    } else if (gameMode === 'br_25' || gameMode === 'br_brtrios') {
+    } else if (gameMode === 'br_25' || gameMode === 'br_brtrios' || gameMode === 'br_74') {
       newGameMode = 'Battle Royal Threes';
-    } else if (gameMode === 'br_89') {
+    } else if (gameMode === 'br_89' || gameMode === 'br_brquads') {
       newGameMode = 'Battle Royal Quads';
     } else if (gameMode === 'br_86' || gameMode === 'br_br_real') {
       newGameMode = 'Realism Quads';
@@ -26,7 +26,7 @@ const CommonHelpers = {
       newGameMode = 'Stimulus Solos';
     } else if (gameMode === 'br_77') {
       newGameMode = 'Scopes And Scatterguns';
-    } else if (gameMode === 'brtdm_113') {
+    } else if (gameMode === 'brtdm_113' || gameMode === 'brtdm_rmbl') {
       newGameMode = 'TDM 50v50';
     } else if (!isNllOrUnd(gameMode)) {
       newGameMode = gameMode;
