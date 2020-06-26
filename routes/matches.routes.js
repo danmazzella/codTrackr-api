@@ -37,6 +37,11 @@ const router = express.Router();
  *              - all
  *              - solos
  *              - threes
+ *        - name: topTen
+ *          description: Filter for only top 10 results
+ *          in: query
+ *          schema:
+ *            type: boolean
  *      responses:
  *        200:
  *          description: Server is up and running
@@ -119,6 +124,11 @@ router.route('/matches/fetchLatest/:gamertag')
  *            maximum: 100
  *        - name: players
  *          description: Array of players you to include
+ *          in: query
+ *          schema:
+ *            type: string
+ *        - name: monthFilter
+ *          description: Month wish to get results for
  *          in: query
  *          schema:
  *            type: string

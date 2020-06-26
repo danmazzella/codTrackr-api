@@ -166,6 +166,32 @@ const PlayerController = {
       return res.status(500).json(new MazzError().addServerError(error.message));
     }
   },
+  getWeekMonthStats: async (req, res) => {
+    try {
+      const {
+        monthFilter,
+        page,
+        pageSize,
+        players,
+        sortColumn,
+        sortDir,
+      } = PlayersValidator.getWeekMonthStats(req);
+
+      const returnObj = await PlayerService.getWeekMonthStats({
+        monthFilter,
+        page,
+        pageSize,
+        players,
+        sortColumn,
+        sortDir,
+      });
+
+      return res.status(200).json(returnObj);
+    } catch (error) {
+      Logger.error('Unable to fetch week/month stats: ', error);
+      return res.status(500).json(new MazzError().addServerError(error.message));
+    }
+  },
 };
 
 module.exports = PatrolMan.patrol('players', PlayerController);

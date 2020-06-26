@@ -156,6 +156,58 @@ const PlayersValidator = {
       sortDir,
     };
   },
+  getWeekMonthStats: (req) => {
+    const {
+      monthFilter: _monthFilter,
+      page: _page,
+      pageSize: _pageSize,
+      players: _players,
+      sortColumn: _sortColumn,
+      sortDir: _sortDir,
+    } = req.query;
+
+    let monthFilter = Tools.toJson(_monthFilter);
+    let page = Tools.toInteger(_page);
+    let pageSize = Tools.toInteger(_pageSize);
+    let players = Tools.toArray(_players);
+    let sortColumn = _sortColumn;
+    let sortDir = _sortDir;
+
+    if (!Validator.isValidObject(monthFilter) || (monthFilter.month < 1 || monthFilter.month > 12) || (monthFilter.year < 2020 || monthFilter.year > 2021)) {
+      monthFilter = undefined;
+    }
+
+    if (!Validator.isValidId(page)) {
+      page = 1;
+    }
+
+    if (!Validator.isValidId(pageSize)) {
+      pageSize = 25;
+    }
+
+    if (isNllOrUnd(sortColumn)) {
+      sortColumn = 'timePlayed';
+    }
+
+    if (!Validator.isValidSortDir(sortDir)) {
+      sortDir = 'desc';
+    } else {
+      sortDir = sortDir.toLowerCase();
+    }
+
+    if (!Array.isArray(players)) {
+      players = undefined;
+    }
+
+    return {
+      monthFilter,
+      page,
+      pageSize,
+      players,
+      sortColumn,
+      sortDir,
+    };
+  },
 };
 
 module.exports = PlayersValidator;
