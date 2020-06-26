@@ -26,7 +26,6 @@ const fetchUserStatsTask = require('../tasks/fetchUserStats.task');
 
 // Policies
 const PatrolManPolicies = require('../policies/config');
-const PlayersService = require('../services/players.service');
 
 // Constants
 PatrolMan = new PatrolMan(PatrolManPolicies);
@@ -176,7 +175,7 @@ const PlayerController = {
         players,
       } = PlayersValidator.getWeekMonthStats(req);
 
-      const returnObj = await PlayersService.getWeekMonthStats({
+      const returnObj = await PlayerService.getWeekMonthStats({
         monthFilter,
         page,
         pageSize,
