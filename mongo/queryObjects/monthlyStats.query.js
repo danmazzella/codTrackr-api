@@ -233,6 +233,11 @@ module.exports.GET_WEEK_MONTH_STATS = [
     },
   },
   {
+    $sort: {
+      ['%SORT_COLUMN%']: '%SORT_ORDER%', // eslint-disable-line
+    },
+  },
+  {
     $skip: '%PAGE%',
   },
   {

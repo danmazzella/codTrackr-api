@@ -248,11 +248,20 @@ const PlayersService = {
         page,
         pageSize,
         players,
+        sortColumn,
+        sortDir,
       } = reqObj;
+
+      let sortOrder = -1;
+      if (sortDir === 'asc') {
+        sortOrder = 1;
+      }
 
       const aggregateParams = {
         '%PAGE%': (page - 1) * pageSize,
         '%PAGE_SIZE%': pageSize,
+        '%SORT_COLUMN%': sortColumn,
+        '%SORT_ORDER%': sortOrder,
       };
 
       let redisKey = WEEK_MONTH_STATS;
@@ -272,7 +281,7 @@ const PlayersService = {
         redisKey = `${redisKey}-month-${monthFilter.month}-year-${monthFilter.year}`;
       }
 
-      redisKey = `${redisKey}-${page - 1}-${pageSize}`;
+      redisKey = `${redisKey}-${page - 1}-${pageSize}-${sortColumn}-${sortOrder}`;
 
       const usersStats = await MatchesHelpers.fetchWeekMonthStats(aggregateObj, redisKey);
 

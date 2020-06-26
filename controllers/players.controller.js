@@ -173,6 +173,8 @@ const PlayerController = {
         page,
         pageSize,
         players,
+        sortColumn,
+        sortDir,
       } = PlayersValidator.getWeekMonthStats(req);
 
       const returnObj = await PlayerService.getWeekMonthStats({
@@ -180,6 +182,8 @@ const PlayerController = {
         page,
         pageSize,
         players,
+        sortColumn,
+        sortDir,
       });
 
       return res.status(200).json(returnObj);
