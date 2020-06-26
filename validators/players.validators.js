@@ -156,6 +156,42 @@ const PlayersValidator = {
       sortDir,
     };
   },
+  getWeekMonthStats: (req) => {
+    const {
+      monthFilter: _monthFilter,
+      page: _page,
+      pageSize: _pageSize,
+      players: _players,
+    } = req.query;
+
+    let monthFilter = Tools.toJson(_monthFilter);
+    let page = Tools.toInteger(_page);
+    let pageSize = Tools.toInteger(_pageSize);
+    let players = Tools.toArray(_players);
+
+    if (!Validator.isValidObject(monthFilter) || (monthFilter.month < 1 || monthFilter.month > 12) || (monthFilter.year < 2020 || monthFilter.year > 2021)) {
+      monthFilter = undefined;
+    }
+
+    if (!Validator.isValidId(page)) {
+      page = 1;
+    }
+
+    if (!Validator.isValidId(pageSize)) {
+      pageSize = 25;
+    }
+
+    if (!Array.isArray(players)) {
+      players = undefined;
+    }
+
+    return {
+      monthFilter,
+      page,
+      pageSize,
+      players,
+    };
+  },
 };
 
 module.exports = PlayersValidator;

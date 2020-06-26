@@ -6,7 +6,7 @@ const Logger = require('../utils/winston');
 const { getAsync, redisClient } = require('../redis/redis');
 
 // Keys
-const { NON_NULL_MATCHES } = require('./keys');
+const { NON_NULL_MATCHES, WEEK_MONTH_STATS } = require('./keys');
 
 module.exports.deleteFromRedis = async (redisKey) => {
   redisClient.del(redisKey);
@@ -40,5 +40,6 @@ module.exports.setInRedis = async (redisKey, data) => {
 
 module.exports.clearRedisMatchKeys = () => {
   this.deleteFromRedis(NON_NULL_MATCHES);
+  this.deleteFromRedis(WEEK_MONTH_STATS);
   this.deleteFromRedisWild(`${NON_NULL_MATCHES}*`);
 };

@@ -1,12 +1,20 @@
 // Utils
+const { arrayToRedisKey, replaceTemplateStrings } = require('../utils/tools');
 const CommonHelpers = require('../utils/commonHelpers');
 const { isNllOrUnd } = require('../utils/validator');
 const Logger = require('../utils/winston');
 const Tools = require('../utils/tools');
 
 // Mongo Helpers
+const MatchesHelpers = require('../mongo/helpers/matches.helper');
 const PlayerStatsHelper = require('../mongo/helpers/playerStats.helper');
 const RecentMatchStatsHelper = require('../mongo/helpers/recentMatchStats.helper');
+
+// Query Objects
+const { GET_WEEK_MONTH_STATS } = require('../mongo/queryObjects/monthlyStats.query');
+
+// Redis
+const { WEEK_MONTH_STATS } = require('../redis/keys');
 
 const PlayersService = {
   savePlayerStats: async (gamertag, playerStats) => {
@@ -230,6 +238,47 @@ const PlayersService = {
       return { success: true, stats: aggregateResponse.rows, totalCount: aggregateResponse.count };
     } catch (error) {
       Logger.error('Error getting lifetime stats: ', error);
+      return { success: false, error: error.message };
+    }
+  },
+  getWeekMonthStats: async (reqObj) => {
+    try {
+      const {
+        monthFilter,
+        page,
+        pageSize,
+        players,
+      } = reqObj;
+
+      const aggregateParams = {
+        '%PAGE%': (page - 1) * pageSize,
+        '%PAGE_SIZE%': pageSize,
+      };
+
+      let redisKey = WEEK_MONTH_STATS;
+
+      const aggregateObj = replaceTemplateStrings(GET_WEEK_MONTH_STATS, aggregateParams);
+
+      if (!isNllOrUnd(players)) {
+        aggregateObj[0].$match.playerName = { $in: players };
+        redisKey = `${redisKey}-${arrayToRedisKey(players)}`;
+      }
+
+      if (!isNllOrUnd(monthFilter)) {
+        aggregateObj[0].$match.matchTime = {
+          $gte: new Date(`${parseInt(monthFilter.year, 10)}-${parseInt(monthFilter.month, 10)}-01`),
+          $lt: new Date(`${parseInt(monthFilter.year, 10)}-${(parseInt(monthFilter.month, 10) + 1)}-01`),
+        };
+        redisKey = `${redisKey}-month-${monthFilter.month}-year-${monthFilter.year}`;
+      }
+
+      redisKey = `${redisKey}-${page - 1}-${pageSize}`;
+
+      const usersStats = await MatchesHelpers.fetchWeekMonthStats(aggregateObj, redisKey);
+
+      return { success: true, players: usersStats.rows, totalCount: usersStats.count };
+    } catch (error) {
+      Logger.error('Error getting week/month stats: ', error);
       return { success: false, error: error.message };
     }
   },

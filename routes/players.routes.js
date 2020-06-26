@@ -241,4 +241,43 @@ router.route('/player/stats/lifetime')
 router.route('/player/stats/recent')
   .get(PlayersController.getRecentStats);
 
+/**
+ *  @swagger
+ *  /api/players/weekMonthStats:
+ *    get:
+ *      tags: [ "PlayersController" ]
+ *      summary: Get week/month stats for players
+ *      parameters:
+ *        - name: page
+ *          description: The page
+ *          in: query
+ *          schema:
+ *            type: integer
+ *            minimum: 1
+ *        - name: pageSize
+ *          description: Page size
+ *          in: query
+ *          schema:
+ *            type: integer
+ *            minimum: 1
+ *            maximum: 100
+ *        - name: players
+ *          description: Array of players you to include
+ *          in: query
+ *          schema:
+ *            type: string
+ *        - name: monthFilter
+ *          description: Month wish to get results for
+ *          in: query
+ *          schema:
+ *            type: string
+ *      responses:
+ *        200:
+ *          description: Server is up and running
+ *        default:
+ *          description: Something is wrong
+ */
+router.route('/players/weekMonthStats')
+  .get(PlayersController.getWeekMonthStats);
+
 module.exports = router;

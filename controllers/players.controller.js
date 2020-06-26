@@ -26,6 +26,7 @@ const fetchUserStatsTask = require('../tasks/fetchUserStats.task');
 
 // Policies
 const PatrolManPolicies = require('../policies/config');
+const PlayersService = require('../services/players.service');
 
 // Constants
 PatrolMan = new PatrolMan(PatrolManPolicies);
@@ -163,6 +164,28 @@ const PlayerController = {
       return res.status(200).json({ success: true });
     } catch (error) {
       Logger.error('Unable to fetch latest stats and matches: ', error);
+      return res.status(500).json(new MazzError().addServerError(error.message));
+    }
+  },
+  getWeekMonthStats: async (req, res) => {
+    try {
+      const {
+        monthFilter,
+        page,
+        pageSize,
+        players,
+      } = PlayersValidator.getWeekMonthStats(req);
+
+      const returnObj = await PlayersService.getWeekMonthStats({
+        monthFilter,
+        page,
+        pageSize,
+        players,
+      });
+
+      return res.status(200).json(returnObj);
+    } catch (error) {
+      Logger.error('Unable to fetch week/month stats: ', error);
       return res.status(500).json(new MazzError().addServerError(error.message));
     }
   },

@@ -81,6 +81,21 @@ const MatchHelpers = {
       })
       .catch(err => reject(err));
   }),
+  fetchWeekMonthStats: (aggregateObject, redisKey) => new Promise(async (resolve, reject) => {
+    const stats = await getFromRedis(redisKey);
+
+    if (!isNllOrUnd(stats)) {
+      return resolve(stats);
+    }
+
+    return MatchHelpers
+      .aggregateAndCount(aggregateObject)
+      .then((data) => {
+        setInRedis(redisKey, data);
+        return resolve(data);
+      })
+      .catch(err => reject(err));
+  }),
 
   // Funcs
   aggregate: obj => new Promise((resolve, reject) => {
