@@ -226,6 +226,31 @@ module.exports.GET_WEEK_MONTH_STATS = [
       avgDownsInCircleSix: {
         $divide: ['$downsInCircleSix', '$count'],
       },
+      totalDowns: {
+        $add: [
+          '$downsInCircleOne',
+          '$downsInCircleTwo',
+          '$downsInCircleThree',
+          '$downsInCircleFour',
+          '$downsInCircleFive',
+          '$downsInCircleSix',
+        ],
+      },
+      avgDowns: {
+        $divide: [
+          {
+            $add: [
+              '$downsInCircleOne',
+              '$downsInCircleTwo',
+              '$downsInCircleThree',
+              '$downsInCircleFour',
+              '$downsInCircleFive',
+              '$downsInCircleSix',
+            ],
+          },
+          '$count',
+        ],
+      },
       ocaScore: 1,
       avgOcaScore: {
         $divide: ['$ocaScore', '$count'],
