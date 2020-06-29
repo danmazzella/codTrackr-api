@@ -7,8 +7,30 @@ module.exports.GET_WEEK_MONTH_STATS = [
     },
   },
   {
+    $addFields: {
+      month: {
+        $month: '$matchTime',
+      },
+      year: {
+        $year: '$matchTime',
+      },
+      week: {
+        $week: '$matchTime',
+      },
+    },
+  },
+  {
     $group: {
       _id: '$playerName',
+      month: {
+        $last: '$month',
+      },
+      year: {
+        $last: '$year',
+      },
+      playerName: {
+        $last: '$playerName',
+      },
       count: {
         $sum: 1,
       },
@@ -127,7 +149,9 @@ module.exports.GET_WEEK_MONTH_STATS = [
   },
   {
     $project: {
-      playerName: '$_id',
+      month: '$month',
+      year: '$year',
+      playerName: '$playerName',
       gamesPlayed: '$count',
       totalPlacements: 1,
       wins: 1,
