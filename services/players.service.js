@@ -249,6 +249,7 @@ const PlayersService = {
         page,
         pageSize,
         players,
+        singlePlayer,
         sortColumn,
         sortDir,
       } = reqObj;
@@ -283,17 +284,35 @@ const PlayersService = {
         redisKey = `${redisKey}-${modeType}`;
       }
 
-      if (!isNllOrUnd(monthFilter)) {
-        aggregateObj[0].$match.matchTime = {
-          $gte: new Date(`${parseInt(monthFilter.year, 10)}-${parseInt(monthFilter.month, 10)}-01`),
-          $lt: new Date(`${parseInt(monthFilter.year, 10)}-${(parseInt(monthFilter.month, 10) + 1)}-01`),
+      // If singlePlayer && !monthFilter, then get month by month stats for player
+      if (!isNllOrUnd(singlePlayer)) {
+        aggregateObj[0].$match.playerName = singlePlayer;
+        aggregateObj[2].$group._id = {
+          month: '$month',
+          year: '$year',
         };
-        redisKey = `${redisKey}-month-${monthFilter.month}-year-${monthFilter.year}`;
-      }
 
-      if (!isNllOrUnd(players)) {
-        aggregateObj[0].$match.playerName = { $in: players };
-        redisKey = `${redisKey}-${arrayToRedisKey(players)}`;
+        if (sortColumn === 'monthYear') {
+          aggregateObj[4].$sort = {
+            month: sortOrder,
+            year: sortOrder,
+          };
+        }
+
+        redisKey = `${redisKey}-singlePlayer-${singlePlayer}`;
+      } else {
+        if (!isNllOrUnd(monthFilter)) {
+          aggregateObj[0].$match.matchTime = {
+            $gte: new Date(`${parseInt(monthFilter.year, 10)}-${parseInt(monthFilter.month, 10)}-01`),
+            $lt: new Date(`${parseInt(monthFilter.year, 10)}-${(parseInt(monthFilter.month, 10) + 1)}-01`),
+          };
+          redisKey = `${redisKey}-month-${monthFilter.month}-year-${monthFilter.year}`;
+        }
+
+        if (!isNllOrUnd(players)) {
+          aggregateObj[0].$match.playerName = { $in: players };
+          redisKey = `${redisKey}-${arrayToRedisKey(players)}`;
+        }
       }
 
       redisKey = `${redisKey}-${page - 1}-${pageSize}-${sortColumn}-${sortOrder}`;

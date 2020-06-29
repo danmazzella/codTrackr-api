@@ -163,6 +163,7 @@ const PlayersValidator = {
       page: _page,
       pageSize: _pageSize,
       players: _players,
+      singlePlayer: _singlePlayer,
       sortColumn: _sortColumn,
       sortDir: _sortDir,
     } = req.query;
@@ -172,6 +173,7 @@ const PlayersValidator = {
     let page = Tools.toInteger(_page);
     let pageSize = Tools.toInteger(_pageSize);
     let players = Tools.toArray(_players);
+    let singlePlayer = _singlePlayer;
     let sortColumn = _sortColumn;
     let sortDir = _sortDir;
 
@@ -191,8 +193,12 @@ const PlayersValidator = {
       pageSize = 25;
     }
 
+    if (!Validator.isValidString(singlePlayer) || singlePlayer === 'none' || singlePlayer === 'undefined') {
+      singlePlayer = undefined;
+    }
+
     if (isNllOrUnd(sortColumn)) {
-      sortColumn = 'timePlayed';
+      sortColumn = 'avgOcaScore';
     }
 
     if (!Validator.isValidSortDir(sortDir)) {
@@ -211,6 +217,7 @@ const PlayersValidator = {
       page,
       pageSize,
       players,
+      singlePlayer,
       sortColumn,
       sortDir,
     };

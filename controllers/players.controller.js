@@ -174,6 +174,7 @@ const PlayerController = {
         page,
         pageSize,
         players,
+        singlePlayer,
         sortColumn,
         sortDir,
       } = PlayersValidator.getWeekMonthStats(req);
@@ -184,6 +185,7 @@ const PlayerController = {
         page,
         pageSize,
         players,
+        singlePlayer,
         sortColumn,
         sortDir,
       });

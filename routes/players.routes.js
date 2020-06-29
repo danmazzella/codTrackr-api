@@ -271,6 +271,11 @@ router.route('/player/stats/recent')
  *          in: query
  *          schema:
  *            type: string
+ *        - name: singlePlayer
+ *          description: An individual player to get month by month stats for
+ *          in: query
+ *          schema:
+ *            type: string
  *      responses:
  *        200:
  *          description: Server is up and running
