@@ -76,31 +76,37 @@ const callCodAPI = url => new Promise(async (resolve) => {
   }, 65000);
 });
 
+const genericPostAPI = (url, headers, body) => new Promise(async (resolve) => {
+  const response = await SuperAgent
+    .post(url)
+    .set(headers)
+    .send(body);
+
+  return resolve(response);
+});
+
 const CODAPI = {
   login: async () => {
     const deviceId = crypto.createHash('md5').update(EnvConfig.callOfDuty.email).digest('hex');
 
-    const registerRes = await SuperAgent
-      .post(`${COD_LOGIN_URL}/registerDevice`)
-      .send({
-        deviceId,
-      });
+    const registerRes = await genericPostAPI(`${COD_LOGIN_URL}/registerDevice`, {}, { deviceId });
 
     if (isNllOrUnd(getKey(registerRes, 'body.data.authHeader'))) {
       Logger.error('Failed to registerDevice');
       throw new MazzError().addServerError('Unable to registerDevice with COD');
     }
 
-    const loginRes = await SuperAgent
-      .post(`${COD_LOGIN_URL}/login`)
-      .send({
-        email: EnvConfig.callOfDuty.email,
-        password: EnvConfig.callOfDuty.password,
-      })
-      .set({
+    const loginRes = await genericPostAPI(
+      `${COD_LOGIN_URL}/login`,
+      {
         Authorization: `bearer ${registerRes.body.data.authHeader}`,
         x_cod_device_id: deviceId,
-      });
+      },
+      {
+        email: EnvConfig.callOfDuty.email,
+        password: EnvConfig.callOfDuty.password,
+      },
+    );
 
     if (isNllOrUnd(getKey(loginRes, 'body.rtkn')) || isNllOrUnd(getKey(loginRes, 'body.atkn')) || isNllOrUnd(getKey(loginRes, 'body.s_ACT_SSO_COOKIE'))) {
       Logger.error('Failed to login');
