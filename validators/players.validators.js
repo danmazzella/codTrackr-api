@@ -158,6 +158,7 @@ const PlayersValidator = {
   },
   getWeekMonthStats: (req) => {
     const {
+      modeType: _modeType,
       monthFilter: _monthFilter,
       page: _page,
       pageSize: _pageSize,
@@ -166,12 +167,17 @@ const PlayersValidator = {
       sortDir: _sortDir,
     } = req.query;
 
+    let modeType = _modeType;
     let monthFilter = Tools.toJson(_monthFilter);
     let page = Tools.toInteger(_page);
     let pageSize = Tools.toInteger(_pageSize);
     let players = Tools.toArray(_players);
     let sortColumn = _sortColumn;
     let sortDir = _sortDir;
+
+    if (!Validator.isValidString(modeType)) {
+      modeType = 'all';
+    }
 
     if (!Validator.isValidObject(monthFilter) || (monthFilter.month < 1 || monthFilter.month > 12) || (monthFilter.year < 2020 || monthFilter.year > 2021)) {
       monthFilter = undefined;
@@ -200,6 +206,7 @@ const PlayersValidator = {
     }
 
     return {
+      modeType,
       monthFilter,
       page,
       pageSize,

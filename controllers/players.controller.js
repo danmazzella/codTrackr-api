@@ -169,6 +169,7 @@ const PlayerController = {
   getWeekMonthStats: async (req, res) => {
     try {
       const {
+        modeType,
         monthFilter,
         page,
         pageSize,
@@ -178,6 +179,7 @@ const PlayerController = {
       } = PlayersValidator.getWeekMonthStats(req);
 
       const returnObj = await PlayerService.getWeekMonthStats({
+        modeType,
         monthFilter,
         page,
         pageSize,

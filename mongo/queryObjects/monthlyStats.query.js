@@ -155,7 +155,21 @@ module.exports.GET_WEEK_MONTH_STATS = [
         $divide: ['$deaths', '$count'],
       },
       killDeathRatio: {
-        $divide: ['$kills', '$deaths'],
+        $cond: {
+          if: {
+            $gt: [
+              '$deaths',
+              0,
+            ],
+          },
+          then: {
+            $divide: [
+              '$kills',
+              '$deaths',
+            ],
+          },
+          else: 0,
+        },
       },
       percentTimeMoving: 1,
       avgTimeMoving: {

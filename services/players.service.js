@@ -244,6 +244,7 @@ const PlayersService = {
   getWeekMonthStats: async (reqObj) => {
     try {
       const {
+        modeType,
         monthFilter,
         page,
         pageSize,
@@ -268,9 +269,18 @@ const PlayersService = {
 
       const aggregateObj = replaceTemplateStrings(GET_WEEK_MONTH_STATS, aggregateParams);
 
-      if (!isNllOrUnd(players)) {
-        aggregateObj[0].$match.playerName = { $in: players };
-        redisKey = `${redisKey}-${arrayToRedisKey(players)}`;
+      if (modeType === 'solos' || modeType === 'duos' || modeType === 'threes' || modeType === 'quads') {
+        if (modeType === 'solos') {
+          aggregateObj[0].$match.modeType = 'Battle Royal Solos';
+        } else if (modeType === 'duos') {
+          aggregateObj[0].$match.modeType = 'Battle Royal Duos';
+        } else if (modeType === 'threes') {
+          aggregateObj[0].$match.modeType = 'Battle Royal Threes';
+        } else if (modeType === 'quads') {
+          aggregateObj[0].$match.modeType = 'Battle Royal Quads';
+        }
+
+        redisKey = `${redisKey}-${modeType}`;
       }
 
       if (!isNllOrUnd(monthFilter)) {
@@ -279,6 +289,11 @@ const PlayersService = {
           $lt: new Date(`${parseInt(monthFilter.year, 10)}-${(parseInt(monthFilter.month, 10) + 1)}-01`),
         };
         redisKey = `${redisKey}-month-${monthFilter.month}-year-${monthFilter.year}`;
+      }
+
+      if (!isNllOrUnd(players)) {
+        aggregateObj[0].$match.playerName = { $in: players };
+        redisKey = `${redisKey}-${arrayToRedisKey(players)}`;
       }
 
       redisKey = `${redisKey}-${page - 1}-${pageSize}-${sortColumn}-${sortOrder}`;
