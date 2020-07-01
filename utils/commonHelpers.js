@@ -232,7 +232,7 @@ const CommonHelpers = {
       kills,
     } = matchObj.stats;
 
-    if (modeType === 'Battle Royal Threes' || modeType === 'Battle Royal Quads') {
+    if (modeType === 'Battle Royal Threes' || modeType === 'Battle Royal Quads' || modeType === 'BR Quads 200') {
       if (placement === 1) {
         ocaScore += 50;
       } else if (placement === 2) {
