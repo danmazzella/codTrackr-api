@@ -14,6 +14,8 @@ const CommonHelpers = {
       newGameMode = 'Battle Royal Threes';
     } else if (gameMode === 'br_89' || gameMode === 'br_brquads') {
       newGameMode = 'Battle Royal Quads';
+    } else if (gameMode === 'br_brthquad') {
+      newGameMode = 'Battle Royal Quads 200';
     } else if (gameMode === 'br_86' || gameMode === 'br_br_real') {
       newGameMode = 'Realism Quads';
     } else if (gameMode === 'br_dmz_85') {
