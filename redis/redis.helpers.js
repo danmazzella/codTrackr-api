@@ -42,4 +42,5 @@ module.exports.clearRedisMatchKeys = () => {
   this.deleteFromRedis(NON_NULL_MATCHES);
   this.deleteFromRedis(WEEK_MONTH_STATS);
   this.deleteFromRedisWild(`${NON_NULL_MATCHES}*`);
+  this.deleteFromRedisWild(`${WEEK_MONTH_STATS}*`);
 };
