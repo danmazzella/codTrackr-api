@@ -1,6 +1,7 @@
 // NPM Modules
 const crypto = require('crypto');
 const SuperAgent = require('superagent');
+const Throttle = require('superagent-throttle')
 
 // Utils
 const EnvConfig = require('../config/config.environment');
@@ -22,6 +23,13 @@ let cookie = 'XSRF-TOKEN=Q4U7FSpwDNlVMxxUpgwUZJ6RKJQU9sxdMzmjudcUvb4BqX5ldDpbFPa
 
 let codReq;
 
+let throttle = new Throttle({
+  active: true, // set false to pause queue
+  rate: 3, // how many requests can be sent every `ratePer`
+  ratePer: 1000, // number of ms in which `rate` requests may be sent
+  concurrent: 2, // how many requests can be sent concurrently
+});
+
 // Universal send request function, just pass in the necessary data
 const callCodAPI = url => new Promise(async (resolve) => {
   if (cookie.indexOf('ACT_SSO_COOKIE') === -1) {
@@ -32,6 +40,7 @@ const callCodAPI = url => new Promise(async (resolve) => {
   Logger.debug('Start callCodAPI: ', url);
   codReq = SuperAgent
     .get(url)
+    .use(throttle.plugin())
     .set({
       'Content-Type': 'application/json',
       Cookie: cookie,
