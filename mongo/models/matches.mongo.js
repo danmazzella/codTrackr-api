@@ -17,6 +17,9 @@ const MatchesSchema = new Schema(
       type: String,
       required: true,
     },
+    origGameMode: {
+      type: String,
+    },
     matchDuration: {
       type: Number,
       default: null,

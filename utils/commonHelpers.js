@@ -44,11 +44,13 @@ const CommonHelpers = {
     try {
       const stats = match.playerStats;
       const matchType = CommonHelpers.getGameModeType(match.mode);
+      const origGameMode = match.mode;
 
       const matchObj = {
         matchId: match.matchID,
         playerName: userName,
         modeType: matchType,
+        origGameMode,
         matchDuration: match.duration,
         matchTime: match.utcStartSeconds * 1000,
         playerCount: match.playerCount,
