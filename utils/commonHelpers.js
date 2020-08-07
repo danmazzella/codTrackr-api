@@ -18,6 +18,8 @@ const CommonHelpers = {
       newGameMode = 'BR Quads 200';
     } else if (gameMode === 'br_86' || gameMode === 'br_br_real') {
       newGameMode = 'Realism Quads';
+    } else if (gameMode === 'br_brbbsolo') {
+      newGameMode = 'BR Buy Back Solos';
     } else if (gameMode === 'br_dmz_85') {
       newGameMode = 'Plunder Duos';
     } else if (gameMode === 'br_dmz_104') {
@@ -30,6 +32,8 @@ const CommonHelpers = {
       newGameMode = 'Scopes And Scatterguns';
     } else if (gameMode === 'brtdm_113' || gameMode === 'brtdm_rmbl') {
       newGameMode = 'TDM 50v50';
+    } else if (gameMode === 'br_mini_miniroyale') {
+      newGameMode = 'Mini Royal Threes';
     } else if (!isNllOrUnd(gameMode)) {
       newGameMode = gameMode;
     }
