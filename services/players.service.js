@@ -302,9 +302,15 @@ const PlayersService = {
         redisKey = `${redisKey}-singlePlayer-${singlePlayer}`;
       } else {
         if (!isNllOrUnd(monthFilter)) {
+          let ltMonth = new Date(`${parseInt(monthFilter.year, 10)}-${(parseInt(monthFilter.month, 10) + 1)}-01`);
+          if (monthFilter.month === '12') {
+            console.log(`${parseInt(monthFilter.year, 10) + 1}-01-01`);
+            ltMonth = new Date(`${parseInt(monthFilter.year, 10) + 1}-01-01`)
+          }
+
           aggregateObj[0].$match.matchTime = {
             $gte: new Date(`${parseInt(monthFilter.year, 10)}-${parseInt(monthFilter.month, 10)}-01`),
-            $lt: new Date(`${parseInt(monthFilter.year, 10)}-${(parseInt(monthFilter.month, 10) + 1)}-01`),
+            $lt: ltMonth,
           };
           redisKey = `${redisKey}-month-${monthFilter.month}-year-${monthFilter.year}`;
         }
