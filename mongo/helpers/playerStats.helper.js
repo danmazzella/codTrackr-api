@@ -17,6 +17,7 @@ const PlayerStatsHelpers = {
   }),
   aggregateAndCount: _arrayOfObj => new Promise((resolve) => {
     const arrayOfObj = _arrayOfObj;
+
     PlayerStats
       .aggregate(arrayOfObj)
       .then((data) => {
