@@ -285,4 +285,30 @@ router.route('/player/stats/recent')
 router.route('/players/weekMonthStats')
   .get(PlayersController.getWeekMonthStats);
 
+/**
+ *  @swagger
+ *  /api/players/awards:
+ *    get:
+ *      tags: [ "PlayersController" ]
+ *      summary: Get week/month stats for players
+ *      parameters:
+ *        - name: players
+ *          description: Array of players you to include
+ *          in: query
+ *          schema:
+ *            type: string
+ *        - name: monthFilter
+ *          description: Month wish to get results for
+ *          in: query
+ *          schema:
+ *            type: string
+ *      responses:
+ *        200:
+ *          description: Server is up and running
+ *        default:
+ *          description: Something is wrong
+ */
+router.route('/players/awards')
+  .get(PlayersController.getAwards);
+
 module.exports = router;

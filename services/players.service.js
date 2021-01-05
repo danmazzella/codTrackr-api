@@ -12,9 +12,11 @@ const RecentMatchStatsHelper = require('../mongo/helpers/recentMatchStats.helper
 
 // Query Objects
 const { GET_WEEK_MONTH_STATS } = require('../mongo/queryObjects/monthlyStats.query');
+const { GET_AWARDS } = require('../mongo/queryObjects/awards.query');
 
 // Redis
-const { WEEK_MONTH_STATS } = require('../redis/keys');
+const { WEEK_MONTH_STATS, AWARDS_KEY } = require('../redis/keys');
+const PlayersHelpers = require('../mongo/helpers/players.helper');
 
 const PlayersService = {
   savePlayerStats: async (gamertag, playerStats) => {
@@ -327,6 +329,121 @@ const PlayersService = {
       return { success: true, players: usersStats.rows, totalCount: usersStats.count };
     } catch (error) {
       Logger.error('Error getting week/month stats: ', error);
+      return { success: false, error: error.message };
+    }
+  },
+  getAwards: async (reqObj) => {
+    try {
+      const {
+        monthFilter,
+        players,
+      } = reqObj;
+
+      const aggregateParams = {
+
+      };
+
+      let redisKey = AWARDS_KEY;
+
+      const aggregateObj = replaceTemplateStrings(GET_AWARDS, aggregateParams);
+
+      if (!isNllOrUnd(monthFilter)) {
+        aggregateObj[0].$match.matchTime = {
+          $gte: new Date(`${parseInt(monthFilter.year, 10)}-${parseInt(monthFilter.month, 10)}-01`),
+          $lt: new Date(`${parseInt(monthFilter.year, 10)}-${(parseInt(monthFilter.month, 10) + 1)}-01`),
+        };
+        redisKey = `${redisKey}-month-${monthFilter.month}-year-${monthFilter.year}`;
+      }
+
+      if (!isNllOrUnd(players)) {
+        aggregateObj[0].$match.playerName = { $in: players };
+        redisKey = `${redisKey}-${arrayToRedisKey(players)}`;
+      }
+
+      const awardData = await MatchesHelpers.fetchAwards(aggregateObj, redisKey);
+
+      return awardData;
+    } catch (error) {
+      Logger.error('Error getting awards: ', error);
+      return { success: false, error: error.message };
+    }
+  },
+  parseAwardsData: (awardsData) => {
+    try {
+      const parsedData = {
+        highestKills: [],
+        highestScore: [],
+        highestHeadshots: [],
+        highestExecutions: [],
+        highestDamageDone: [],
+        highestDamageTaken: [],
+        highestDistanceTraveled: [],
+        highestDeaths: [],
+        highestAssists: [],
+        highestCachesOpened: [],
+        highestRevives: [],
+        highestOcaScore: [],
+        highestKioskBuys: [],
+        highestDowns: [],
+        avgKills: [],
+        avgTimePlayed: [],
+        avgScore: [],
+        avgHeadshots: [],
+        avgExecutions: [],
+        avgTimeMoving: [],
+        avgDamageDone: [],
+        avgDamageTaken: [],
+        avgDistanceTraveled: [],
+        avgDeaths: [],
+        avgAssists: [],
+        avgCachesOpened: [],
+        avgRevives: [],
+        avgOcaScore: [],
+        avgKioskBuys: [],
+        avgDowns: [],
+      };
+
+      awardsData.rows.forEach((data) => {
+        parsedData.highestKills.push({ player: data.playerName, data: data.highestKills });
+        parsedData.highestScore.push({ player: data.playerName, data: data.highestScore });
+        parsedData.highestHeadshots.push({ player: data.playerName, data: data.highestHeadshots });
+        parsedData.highestExecutions.push({ player: data.playerName, data: data.highestExecutions });
+        parsedData.highestDamageDone.push({ player: data.playerName, data: data.highestDamageDone });
+        parsedData.highestDamageTaken.push({ player: data.playerName, data: data.highestDamageTaken });
+        parsedData.highestDistanceTraveled.push({ player: data.playerName, data: data.highestDistanceTraveled });
+        parsedData.highestDeaths.push({ player: data.playerName, data: data.highestDeaths });
+        parsedData.highestAssists.push({ player: data.playerName, data: data.highestAssists });
+        parsedData.highestCachesOpened.push({ player: data.playerName, data: data.highestCachesOpened });
+        parsedData.highestRevives.push({ player: data.playerName, data: data.highestRevives });
+        parsedData.highestOcaScore.push({ player: data.playerName, data: data.highestOcaScore });
+        parsedData.highestKioskBuys.push({ player: data.playerName, data: data.highestKioskBuys });
+        parsedData.highestDowns.push({ player: data.playerName, data: data.highestDowns });
+        parsedData.avgKills.push({ player: data.playerName, data: data.avgKills });
+        parsedData.avgTimePlayed.push({ player: data.playerName, data: data.avgTimePlayed });
+        parsedData.avgScore.push({ player: data.playerName, data: data.avgScore });
+        parsedData.avgHeadshots.push({ player: data.playerName, data: data.avgHeadshots });
+        parsedData.avgExecutions.push({ player: data.playerName, data: data.avgExecutions });
+        parsedData.avgTimeMoving.push({ player: data.playerName, data: data.avgTimeMoving });
+        parsedData.avgDamageDone.push({ player: data.playerName, data: data.avgDamageDone });
+        parsedData.avgDamageTaken.push({ player: data.playerName, data: data.avgDamageTaken });
+        parsedData.avgDistanceTraveled.push({ player: data.playerName, data: data.avgDistanceTraveled });
+        parsedData.avgDeaths.push({ player: data.playerName, data: data.avgDeaths });
+        parsedData.avgAssists.push({ player: data.playerName, data: data.avgAssists });
+        parsedData.avgCachesOpened.push({ player: data.playerName, data: data.avgCachesOpened });
+        parsedData.avgRevives.push({ player: data.playerName, data: data.avgRevives });
+        parsedData.avgOcaScore.push({ player: data.playerName, data: data.avgOcaScore });
+        parsedData.avgKioskBuys.push({ player: data.playerName, data: data.avgKioskBuys });
+        parsedData.avgDowns.push({ player: data.playerName, data: data.avgDowns });
+      });
+
+      const parsedSortedData = {};
+      Object.keys(parsedData).forEach((dataIdx) => {
+        parsedSortedData[dataIdx] = parsedData[dataIdx].sort((objA, objB) => objB.data - objA.data);
+      });
+
+      return parsedSortedData;
+    } catch (error) {
+      Logger.error('Error getting awards parsedData: ', error);
       return { success: false, error: error.message };
     }
   },

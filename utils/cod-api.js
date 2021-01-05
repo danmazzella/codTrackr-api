@@ -23,11 +23,11 @@ let cookie = 'XSRF-TOKEN=Q4U7FSpwDNlVMxxUpgwUZJ6RKJQU9sxdMzmjudcUvb4BqX5ldDpbFPa
 
 let codReq;
 
-let throttle = new Throttle({
+const throttle = new Throttle({
   active: true, // set false to pause queue
-  rate: 3, // how many requests can be sent every `ratePer`
+  rate: 2, // how many requests can be sent every `ratePer`
   ratePer: 1000, // number of ms in which `rate` requests may be sent
-  concurrent: 2, // how many requests can be sent concurrently
+  concurrent: 1, // how many requests can be sent concurrently
 });
 
 // Universal send request function, just pass in the necessary data
@@ -155,6 +155,10 @@ const CODAPI = {
   // Get latest 20 warzone matches between start and end time
   warzoneDateRangeMatches: (gamertag, startTime, endTime, platform = defaultPlatform) => new Promise((resolve) => {
     const urlInput = `${COD_API_URL}/crm/cod/v2/title/mw/platform/${platform}/gamer/${encodeURIComponent(gamertag)}/matches/wz/start/${startTime}/end/${endTime}/details`;
+    callCodAPI(urlInput).then(data => resolve(data)).catch(e => resolve(e));
+  }),
+  warzoneByMatchId: (matchId, platform = defaultPlatform) => new Promise((resolve) => {
+    const urlInput = `${COD_API_URL}/crm/cod/v2/title/mw/platform/${platform}/fullMatch/wz/${matchId}/en`;
     callCodAPI(urlInput).then(data => resolve(data)).catch(e => resolve(e));
   }),
 };

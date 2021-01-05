@@ -96,6 +96,21 @@ const MatchHelpers = {
       })
       .catch(err => reject(err));
   }),
+  fetchAwards: (aggregateObject, redisKey) => new Promise(async (resolve, reject) => {
+    const awards = await getFromRedis(redisKey);
+
+    if (!isNllOrUnd(awards)) {
+      return resolve(awards);
+    }
+
+    return MatchHelpers
+      .aggregateAndCount(aggregateObject)
+      .then((data) => {
+        setInRedis(redisKey, data);
+        return resolve(data);
+      })
+      .catch(err => reject(err));
+  }),
 
   // Funcs
   aggregate: obj => new Promise((resolve, reject) => {

@@ -141,4 +141,25 @@ router.route('/matches/fetchLatest/:gamertag')
 router.route('/matches/topFive')
   .get(MatchesController.getTopFiveGames);
 
+/**
+ *  @swagger
+ *  /api/matches/{matchId}:
+ *    get:
+ *      tags: [ "MatchesController" ]
+ *      summary: Get a match data
+ *      parameters:
+ *        - name: matchId
+ *          description: Match data
+ *          in: path
+ *          schema:
+ *            type: string
+ *      responses:
+ *        200:
+ *          description: Server is up and running
+ *        default:
+ *          description: Something is wrong
+ */
+router.route('/matches/:matchId')
+  .get(MatchesController.getMatchData);
+
 module.exports = router;

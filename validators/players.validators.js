@@ -222,6 +222,28 @@ const PlayersValidator = {
       sortDir,
     };
   },
+  getAwards: (req) => {
+    const {
+      monthFilter: _monthFilter,
+      players: _players,
+    } = req.query;
+
+    let monthFilter = Tools.toJson(_monthFilter);
+    let players = Tools.toArray(_players);
+
+    if (!Validator.isValidObject(monthFilter) || (monthFilter.month < 1 || monthFilter.month > 12) || (monthFilter.year < 2020 || monthFilter.year > 2021)) {
+      monthFilter = undefined;
+    }
+
+    if (!Array.isArray(players)) {
+      players = undefined;
+    }
+
+    return {
+      monthFilter,
+      players,
+    };
+  },
 };
 
 module.exports = PlayersValidator;

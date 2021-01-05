@@ -196,6 +196,30 @@ const PlayerController = {
       return res.status(500).json(new MazzError().addServerError(error.message));
     }
   },
+  getAwards: async (req, res) => {
+    try {
+      const {
+        monthFilter,
+        players,
+      } = PlayersValidator.getAwards(req);
+
+      const awardsData = await PlayerService.getAwards({
+        monthFilter,
+        players,
+      });
+
+      if (!isNllOrUnd(awardsData.success)) {
+        return res.status(400).json(awardsData);
+      }
+
+      const parsedData = PlayerService.parseAwardsData(awardsData);
+
+      return res.status(200).json(parsedData);
+    } catch (error) {
+      Logger.error('Unable to get awards: ', error);
+      return res.status(500).json(new MazzError().addServerError(error.message));
+    }
+  },
 };
 
 module.exports = PatrolMan.patrol('players', PlayerController);
