@@ -478,7 +478,7 @@ const PlayersService = {
         });
         parsedData.highest.timePlayed.push({
           player: data.playerName,
-          data: data.avgTimePlayed,
+          data: data.totalTimePlayed,
         });
         parsedData.highest.score.push({
           player: data.playerName,

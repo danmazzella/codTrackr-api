@@ -132,11 +132,12 @@ module.exports.GET_AWARDS = [
     $project: {
       playerName: '$_id',
       numMatches: 1,
-      avgKills: {
-        $divide: ['$totalKills', '$numMatches'],
-      },
+      totalTimePlayed: '$totalTimePlayed',
       avgTimePlayed: {
         $divide: ['$totalTimePlayed', '$numMatches'],
+      },
+      avgKills: {
+        $divide: ['$totalKills', '$numMatches'],
       },
       avgScore: {
         $divide: ['$score', '$numMatches'],
@@ -181,7 +182,6 @@ module.exports.GET_AWARDS = [
         $divide: ['$downs', '$numMatches'],
       },
       highestKills: 1,
-      highestTimePlayed: 1,
       highestScore: 1,
       highestHeadshots: 1,
       highestExecutions: 1,
