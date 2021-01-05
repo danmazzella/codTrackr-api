@@ -21,6 +21,7 @@ const { GET_MATCHES_QUERY } = require('../mongo/queryObjects/matches.query');
 
 // Redis
 const { NON_NULL_MATCHES } = require('../redis/keys');
+const CODAPI = require('../utils/cod-api');
 
 const MatchesService = {
   getMatches: async (reqObj) => {
@@ -271,6 +272,23 @@ const MatchesService = {
       return {
         success: true,
         match,
+      };
+    } catch (error) {
+      Logger.error('Error getting match: ', error);
+      return { success: false, error: new MazzError().addServerError(error.message) };
+    }
+  },
+  getMatchData: async (reqObj) => {
+    try {
+      const {
+        matchId,
+      } = reqObj;
+
+      const matchData = await CODAPI.warzoneByMatchId(matchId);
+
+      return {
+        success: true,
+        matchData,
       };
     } catch (error) {
       Logger.error('Error getting match: ', error);

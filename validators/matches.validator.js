@@ -108,6 +108,24 @@ const MatchesValidator = {
       mazzError,
     };
   },
+  getMatchData: (req) => {
+    const {
+      matchId: _matchId,
+    } = req.params;
+
+    const matchId = _matchId;
+
+    const mazzError = new MazzError(400);
+
+    if (isNllOrUnd(matchId)) {
+      mazzError.addParamError('Missing or invalid matchId');
+    }
+
+    return {
+      matchId,
+      mazzError,
+    };
+  },
 };
 
 module.exports = MatchesValidator;

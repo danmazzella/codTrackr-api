@@ -123,6 +123,27 @@ const MatchesController = {
       return res.status(500).json(new MazzError().addServerError(error.message));
     }
   },
+  getMatchData: async (req, res) => {
+    try {
+      const {
+        matchId,
+        mazzError,
+      } = MatchesValidator.getMatchData(req);
+
+      if (mazzError.isErrors()) {
+        return res.status(mazzError.code).json(mazzError);
+      }
+
+      const returnObj = await MatchesService.getMatchData({
+        matchId,
+      });
+
+      return res.status(200).json(returnObj);
+    } catch (error) {
+      Logger.error('Error getting match: ', error);
+      return res.status(500).json(new MazzError().addServerError(error.message));
+    }
+  },
 };
 
 module.exports = PatrolMan.patrol('matches', MatchesController);

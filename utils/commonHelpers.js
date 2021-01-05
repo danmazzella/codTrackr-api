@@ -18,13 +18,17 @@ const CommonHelpers = {
       newGameMode = 'BR Quads 200';
     } else if (gameMode === 'br_86' || gameMode === 'br_br_real') {
       newGameMode = 'Realism Quads';
-    } else if (gameMode === 'br_brbbsolo') {
+    } else if (gameMode === 'br_brbbsolo' || gameMode === 'br_brbbsolo') {
       newGameMode = 'BR Buy Back Solos';
+    } else if (gameMode === 'br_brbbduo') {
+      newGameMode = 'BR Buy Back Duos';
+    } else if (gameMode === 'br_brbbquad') {
+      newGameMode = 'BR Buy Back Quads';
     } else if (gameMode === 'br_dmz_85') {
       newGameMode = 'Plunder Duos';
     } else if (gameMode === 'br_dmz_104') {
       newGameMode = 'Plunder Threes';
-    } else if (gameMode === 'br_dmz_76' || gameMode === 'br_dmz_38') {
+    } else if (gameMode === 'br_dmz_76' || gameMode === 'br_dmz_38' || gameMode === 'br_dmz_plunquad') {
       newGameMode = 'Plunder Quads';
     } else if (gameMode === 'br_71') {
       newGameMode = 'Stimulus Solos';
@@ -34,6 +38,22 @@ const CommonHelpers = {
       newGameMode = 'TDM 50v50';
     } else if (gameMode === 'br_mini_miniroyale') {
       newGameMode = 'Mini Royal Threes';
+    } else if (gameMode === 'br_dmz_plndcndy') {
+      newGameMode = 'Plunder: Candy Collector';
+    } else if (gameMode === 'br_brsolohwn') {
+      newGameMode = 'BR Solo Survivor';
+    } else if (gameMode === 'br_dmz_plnbld') {
+      newGameMode = 'Blood Money';
+    } else if (gameMode === 'br_zxp_zmbroy') {
+      newGameMode = 'Zombie Royale';
+    } else if (gameMode === 'br_truckwar_trwarsquads') {
+      newGameMode = 'Armored Royale Quads';
+    } else if (gameMode === 'br_jugg_jugpmpkn') {
+      newGameMode = 'Juggourdnaut Royale';
+    } else if (gameMode === 'br_kingslayer_kingsltrios') {
+      newGameMode = 'King Slayer Trios';
+    } else if (gameMode === 'br_brhwntrios') {
+      newGameMode = 'BR Trick-Or-Trios';
     } else if (!isNllOrUnd(gameMode)) {
       newGameMode = gameMode;
     }
