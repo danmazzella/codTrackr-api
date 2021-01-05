@@ -214,7 +214,7 @@ const PlayerController = {
 
       const parsedData = PlayerService.parseAwardsData(awardsData);
 
-      return res.status(200).json(parsedData);
+      return res.status(200).json({ awards: parsedData });
     } catch (error) {
       Logger.error('Unable to get awards: ', error);
       return res.status(500).json(new MazzError().addServerError(error.message));

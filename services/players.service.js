@@ -371,74 +371,247 @@ const PlayersService = {
   parseAwardsData: (awardsData) => {
     try {
       const parsedData = {
-        highestKills: [],
-        highestScore: [],
-        highestHeadshots: [],
-        highestExecutions: [],
-        highestDamageDone: [],
-        highestDamageTaken: [],
-        highestDistanceTraveled: [],
-        highestDeaths: [],
-        highestAssists: [],
-        highestCachesOpened: [],
-        highestRevives: [],
-        highestOcaScore: [],
-        highestKioskBuys: [],
-        highestDowns: [],
-        avgKills: [],
-        avgTimePlayed: [],
-        avgScore: [],
-        avgHeadshots: [],
-        avgExecutions: [],
-        avgTimeMoving: [],
-        avgDamageDone: [],
-        avgDamageTaken: [],
-        avgDistanceTraveled: [],
-        avgDeaths: [],
-        avgAssists: [],
-        avgCachesOpened: [],
-        avgRevives: [],
-        avgOcaScore: [],
-        avgKioskBuys: [],
-        avgDowns: [],
+        information: {
+          timePlayed: {
+            title: 'No Life?',
+            tooltip: 'Amount of time played.',
+          },
+          kills: {
+            title: 'The Punisher',
+            tooltip: 'Amount of kills',
+          },
+          score: {
+            title: 'Objective Focused',
+            tooltip: 'Amount of score (XP)',
+          },
+          headshots: {
+            title: 'The Headhunter',
+            tooltip: 'Amount of headshots',
+          },
+          executions: {
+            title: 'The Executioner',
+            tooltip: 'Amount of executions',
+          },
+          damageDone: {
+            title: 'Damage Done',
+            tooltip: 'Amount of damage done',
+          },
+          damageTaken: {
+            title: 'The Bullet Sponge',
+            tooltip: 'Amount of damage taken',
+          },
+          distanceTraveled: {
+            title: 'Carmen Sandiego',
+            tooltip: 'Amount of distance traveled',
+          },
+          deaths: {
+            title: 'Trouble staying alive?',
+            tooltip: 'Amount of deaths',
+          },
+          assists: {
+            title: 'Staying engaged',
+            tooltip: 'Amount of assists',
+          },
+          cachesOpened: {
+            title: 'The Big Loot-owski',
+            tooltip: 'Amount of caches opened',
+          },
+          revives: {
+            title: 'Team Medic',
+            tooltip: 'Amount of revives',
+          },
+          ocaScore: {
+            title: 'Well-Balanced',
+            tooltip: 'OcaScore',
+          },
+          kioskBuys: {
+            title: 'Shopping Expert',
+            tooltip: 'Amount of kiosk buys',
+          },
+          downs: {
+            title: 'Knock-Out Punches',
+            tooltip: 'Amount of downs',
+          },
+        },
+        highest: {
+          timePlayed: [],
+          kills: [],
+          score: [],
+          headshots: [],
+          executions: [],
+          timeMoving: [],
+          damageDone: [],
+          damageTaken: [],
+          distanceTraveled: [],
+          deaths: [],
+          assists: [],
+          cachesOpened: [],
+          revives: [],
+          ocaScore: [],
+          kioskBuys: [],
+          downs: [],
+        },
+        average: {
+          timePlayed: [],
+          kills: [],
+          score: [],
+          headshots: [],
+          executions: [],
+          timeMoving: [],
+          damageDone: [],
+          damageTaken: [],
+          distanceTraveled: [],
+          deaths: [],
+          assists: [],
+          cachesOpened: [],
+          revives: [],
+          ocaScore: [],
+          kioskBuys: [],
+          downs: [],
+        },
       };
 
       awardsData.rows.forEach((data) => {
-        parsedData.highestKills.push({ player: data.playerName, data: data.highestKills });
-        parsedData.highestScore.push({ player: data.playerName, data: data.highestScore });
-        parsedData.highestHeadshots.push({ player: data.playerName, data: data.highestHeadshots });
-        parsedData.highestExecutions.push({ player: data.playerName, data: data.highestExecutions });
-        parsedData.highestDamageDone.push({ player: data.playerName, data: data.highestDamageDone });
-        parsedData.highestDamageTaken.push({ player: data.playerName, data: data.highestDamageTaken });
-        parsedData.highestDistanceTraveled.push({ player: data.playerName, data: data.highestDistanceTraveled });
-        parsedData.highestDeaths.push({ player: data.playerName, data: data.highestDeaths });
-        parsedData.highestAssists.push({ player: data.playerName, data: data.highestAssists });
-        parsedData.highestCachesOpened.push({ player: data.playerName, data: data.highestCachesOpened });
-        parsedData.highestRevives.push({ player: data.playerName, data: data.highestRevives });
-        parsedData.highestOcaScore.push({ player: data.playerName, data: data.highestOcaScore });
-        parsedData.highestKioskBuys.push({ player: data.playerName, data: data.highestKioskBuys });
-        parsedData.highestDowns.push({ player: data.playerName, data: data.highestDowns });
-        parsedData.avgKills.push({ player: data.playerName, data: data.avgKills });
-        parsedData.avgTimePlayed.push({ player: data.playerName, data: data.avgTimePlayed });
-        parsedData.avgScore.push({ player: data.playerName, data: data.avgScore });
-        parsedData.avgHeadshots.push({ player: data.playerName, data: data.avgHeadshots });
-        parsedData.avgExecutions.push({ player: data.playerName, data: data.avgExecutions });
-        parsedData.avgTimeMoving.push({ player: data.playerName, data: data.avgTimeMoving });
-        parsedData.avgDamageDone.push({ player: data.playerName, data: data.avgDamageDone });
-        parsedData.avgDamageTaken.push({ player: data.playerName, data: data.avgDamageTaken });
-        parsedData.avgDistanceTraveled.push({ player: data.playerName, data: data.avgDistanceTraveled });
-        parsedData.avgDeaths.push({ player: data.playerName, data: data.avgDeaths });
-        parsedData.avgAssists.push({ player: data.playerName, data: data.avgAssists });
-        parsedData.avgCachesOpened.push({ player: data.playerName, data: data.avgCachesOpened });
-        parsedData.avgRevives.push({ player: data.playerName, data: data.avgRevives });
-        parsedData.avgOcaScore.push({ player: data.playerName, data: data.avgOcaScore });
-        parsedData.avgKioskBuys.push({ player: data.playerName, data: data.avgKioskBuys });
-        parsedData.avgDowns.push({ player: data.playerName, data: data.avgDowns });
+        parsedData.highest.kills.push({
+          player: data.playerName,
+          data: data.highestKills,
+        });
+        parsedData.highest.timePlayed.push({
+          player: data.playerName,
+          data: data.avgTimePlayed,
+        });
+        parsedData.highest.score.push({
+          player: data.playerName,
+          data: data.highestScore,
+        });
+        parsedData.highest.headshots.push({
+          player: data.playerName,
+          data: data.highestHeadshots,
+        });
+        parsedData.highest.executions.push({
+          player: data.playerName,
+          data: data.highestExecutions,
+        });
+        parsedData.highest.timeMoving.push({
+          player: data.playerName,
+          data: data.highestTimeMoving,
+        });
+        parsedData.highest.damageDone.push({
+          player: data.playerName,
+          data: data.highestDamageDone,
+        });
+        parsedData.highest.damageTaken.push({
+          player: data.playerName,
+          data: data.highestDamageTaken,
+        });
+        parsedData.highest.distanceTraveled.push({
+          player: data.playerName,
+          data: data.highestDistanceTraveled,
+        });
+        parsedData.highest.deaths.push({
+          player: data.playerName,
+          data: data.highestDeaths,
+        });
+        parsedData.highest.assists.push({
+          player: data.playerName,
+          data: data.highestAssists,
+        });
+        parsedData.highest.cachesOpened.push({
+          player: data.playerName,
+          data: data.highestCachesOpened,
+        });
+        parsedData.highest.revives.push({
+          player: data.playerName,
+          data: data.highestRevives,
+        });
+        parsedData.highest.ocaScore.push({
+          player: data.playerName,
+          data: data.highestOcaScore,
+        });
+        parsedData.highest.kioskBuys.push({
+          player: data.playerName,
+          data: data.highestKioskBuys,
+        });
+        parsedData.highest.downs.push({
+          player: data.playerName,
+          data: data.highestDowns,
+        });
+        parsedData.average.kills.push({
+          player: data.playerName,
+          data: data.avgKills,
+        });
+        parsedData.average.timePlayed.push({
+          player: data.playerName,
+          data: data.avgTimePlayed,
+        });
+        parsedData.average.score.push({
+          player: data.playerName,
+          data: data.avgScore,
+        });
+        parsedData.average.headshots.push({
+          player: data.playerName,
+          data: data.avgHeadshots,
+        });
+        parsedData.average.executions.push({
+          player: data.playerName,
+          data: data.avgExecutions,
+        });
+        parsedData.average.timeMoving.push({
+          player: data.playerName,
+          data: data.avgTimeMoving,
+        });
+        parsedData.average.damageDone.push({
+          player: data.playerName,
+          data: data.avgDamageDone,
+        });
+        parsedData.average.damageTaken.push({
+          player: data.playerName,
+          data: data.avgDamageTaken,
+        });
+        parsedData.average.distanceTraveled.push({
+          player: data.playerName,
+          data: data.avgDistanceTraveled,
+        });
+        parsedData.average.deaths.push({
+          player: data.playerName,
+          data: data.avgDeaths,
+        });
+        parsedData.average.assists.push({
+          player: data.playerName,
+          data: data.avgAssists,
+        });
+        parsedData.average.cachesOpened.push({
+          player: data.playerName,
+          data: data.avgCachesOpened,
+        });
+        parsedData.average.revives.push({
+          player: data.playerName,
+          data: data.avgRevives,
+        });
+        parsedData.average.ocaScore.push({
+          player: data.playerName,
+          data: data.avgOcaScore,
+        });
+        parsedData.average.kioskBuys.push({
+          player: data.playerName,
+          data: data.avgKioskBuys,
+        });
+        parsedData.average.downs.push({
+          player: data.playerName,
+          data: data.avgDowns,
+        });
       });
 
-      const parsedSortedData = {};
-      Object.keys(parsedData).forEach((dataIdx) => {
-        parsedSortedData[dataIdx] = parsedData[dataIdx].sort((objA, objB) => objB.data - objA.data);
+      const parsedSortedData = {
+        information: parsedData.information,
+        highest: {},
+        average: {},
+      };
+      Object.keys(parsedData.highest).forEach((dataIdx) => {
+        parsedSortedData.highest[dataIdx] = parsedData.highest[dataIdx].sort((objA, objB) => objB.data - objA.data);
+      });
+      Object.keys(parsedData.average).forEach((dataIdx) => {
+        parsedSortedData.average[dataIdx] = parsedData.average[dataIdx].sort((objA, objB) => objB.data - objA.data);
       });
 
       return parsedSortedData;

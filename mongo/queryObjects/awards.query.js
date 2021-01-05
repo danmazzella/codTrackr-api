@@ -72,6 +72,9 @@ module.exports.GET_AWARDS = [
       highestKills: {
         $max: '$stats.kills',
       },
+      highestTimePlayed: {
+        $max: '$stats.timePlayedSeconds',
+      },
       highestScore: {
         $max: '$stats.score',
       },
@@ -80,6 +83,9 @@ module.exports.GET_AWARDS = [
       },
       highestExecutions: {
         $max: '$stats.executions',
+      },
+      highestTimeMoving: {
+        $max: '$stats.percentTimeMoving',
       },
       highestDamageDone: {
         $max: '$stats.damageDone',
@@ -97,7 +103,7 @@ module.exports.GET_AWARDS = [
         $max: '$stats.assists',
       },
       highestCachesOpened: {
-        $max: '$stats.cachedOpened',
+        $max: '$stats.cachesOpened',
       },
       highestRevives: {
         $max: '$stats.revives',
@@ -175,9 +181,11 @@ module.exports.GET_AWARDS = [
         $divide: ['$downs', '$numMatches'],
       },
       highestKills: 1,
+      highestTimePlayed: 1,
       highestScore: 1,
       highestHeadshots: 1,
       highestExecutions: 1,
+      highestTimeMoving: 1,
       highestDamageDone: 1,
       highestDamageTaken: 1,
       highestDistanceTraveled: 1,
