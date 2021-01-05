@@ -149,10 +149,7 @@ const CODAPI = {
   warzoneLatestMatches: (gamertag, platform = defaultPlatform) => new Promise((resolve) => {
     const urlInput = `${COD_API_URL}/crm/cod/v2/title/mw/platform/${platform}/gamer/${encodeURIComponent(gamertag)}/matches/wz/start/0/end/0/details`;
     callCodAPI(urlInput)
-      .then(data => {
-        console.log(JSON.stringify(data));
-        return resolve(data);
-      })
+      .then(data => resolve(data))
       .catch(e => resolve(e));
   }),
   // Get latest 20 warzone matches between start and end time
