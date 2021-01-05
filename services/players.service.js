@@ -377,7 +377,7 @@ const PlayersService = {
             tooltip: 'Amount of time played.',
           },
           kills: {
-            title: 'The Punisher',
+            title: 'Rambo',
             tooltip: 'Amount of kills',
           },
           score: {
@@ -393,7 +393,7 @@ const PlayersService = {
             tooltip: 'Amount of executions',
           },
           damageDone: {
-            title: 'Damage Done',
+            title: 'The Punisher',
             tooltip: 'Amount of damage done',
           },
           damageTaken: {
@@ -425,7 +425,7 @@ const PlayersService = {
             tooltip: 'OcaScore',
           },
           kioskBuys: {
-            title: 'Shopping Expert',
+            title: 'Shopaholic',
             tooltip: 'Amount of kiosk buys',
           },
           downs: {
