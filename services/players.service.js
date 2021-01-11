@@ -296,8 +296,8 @@ const PlayersService = {
 
         if (sortColumn === 'monthYear') {
           aggregateObj[4].$sort = {
-            month: sortOrder,
             year: sortOrder,
+            month: sortOrder,
           };
         }
 
