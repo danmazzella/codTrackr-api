@@ -14,7 +14,6 @@ const {
   setInRedis,
 } = require('../../redis/redis.helpers');
 
-
 const MatchHelpers = {
   // CREATES
 
@@ -75,9 +74,67 @@ const MatchHelpers = {
 
     return MatchHelpers
       .aggregateAndCount(aggregateObject)
-      .then((data) => {
-        setInRedis(redisKey, data);
-        return resolve(data);
+      .then(async (data) => {
+        const matchIds = data.rows.map(item => item._id);
+
+        const pickedMatches = await MatchHelpers.aggregate([
+          {
+            $match: {
+              matchId: {
+                $in: matchIds,
+              },
+            },
+          },
+          {
+            $project: {
+              matchId: 1,
+              playerName: 1,
+              createdAt: 1,
+              mapName: 1,
+              matchDuration: 1,
+              matchTime: 1,
+              modeType: 1,
+              placement: 1,
+              playerCount: 1,
+              stats: 1,
+              updatedAt: 1,
+              players: 1,
+            },
+          },
+          {
+            $group: {
+              _id: '$matchId',
+              modeType: {
+                $last: '$modeType',
+              },
+              matchTime: {
+                $last: '$matchTime',
+              },
+              matchDuration: {
+                $last: '$matchDuration',
+              },
+              placement: {
+                $last: '$placement',
+              },
+              matches: {
+                $push: '$$ROOT',
+              },
+            },
+          },
+          {
+            $sort: {
+              matchTime: -1,
+            },
+          },
+        ]);
+
+        const returnResult = {
+          rows: pickedMatches,
+          count: data.count,
+        };
+
+        setInRedis(redisKey, returnResult);
+        return resolve(returnResult);
       })
       .catch(err => reject(err));
   }),

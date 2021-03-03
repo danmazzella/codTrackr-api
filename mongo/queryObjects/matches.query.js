@@ -37,9 +37,6 @@ module.exports.GET_MATCHES_QUERY = [
       placement: {
         $last: '$placement',
       },
-      matches: {
-        $push: '$$ROOT',
-      },
     },
   },
   {
